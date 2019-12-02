@@ -37,3 +37,4 @@
 - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
 - [EF迁移命令](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
 - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
+- [json patch](http://jsonpatch.com/)
