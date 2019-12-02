@@ -4,6 +4,8 @@
   - windows安装docker
   - docker简单操作，配置阿里云加速，拉取镜像包
   - docker安装mysql
+    - 直接运行
+    - 外部volume挂载资料卷
 - ef生成数据库
   - ef介绍
   - 生成数据库
@@ -32,6 +34,6 @@
 - 健康检查
 
 ## 参考资料
+- [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
 - [EF迁移命令](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
-- [EF实体在类库](https://docs.microsoft.com/zh-cn/ef/core/miscellaneous/cli/dbcontext-creation)
 - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
