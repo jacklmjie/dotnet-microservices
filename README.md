@@ -16,8 +16,9 @@
   - dapper contain使用
   - dapper仓储在webapi的使用
   - dapper事务，工作单元应用
-- webapi Restful接口
+- webapi Restful
   - Restful风格介绍
+  - Restful风格使用
   - PostMan工具的使用
 - 全局异常日志
 - json patch
@@ -35,6 +36,7 @@
 
 ## 参考资料
 - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
+- [docker安装mysql命令]
 - [EF迁移命令](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
 - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
 - [json patch](http://jsonpatch.com/)
