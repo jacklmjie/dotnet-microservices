@@ -27,6 +27,11 @@
 ### .NET WEB API实战二（用户服务）
 - jwt授权
 - 单元测试
-- 日志记录ELK
 - 消息队列数据交互
+- 日志记录ELK
 - 健康检查
+
+## 参考资料
+- [EF迁移命令](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
+- [EF实体在类库](https://docs.microsoft.com/zh-cn/ef/core/miscellaneous/cli/dbcontext-creation)
+- [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
