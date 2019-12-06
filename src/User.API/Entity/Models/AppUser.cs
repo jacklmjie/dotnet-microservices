@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Dapper.Contrib.Extensions;
+using System.Collections.Generic;
 
 namespace User.API.Entity.Models
 {
+    [Table("Users")]
     public class AppUser
     {
+        [Key]
         public int Id { get; set; }
-        
         public string Name { get; set; }
         public int Age { get; set; }
 

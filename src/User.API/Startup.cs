@@ -8,6 +8,10 @@ using User.API.Data;
 using Microsoft.EntityFrameworkCore;
 using User.API.Entity.Models;
 using User.API.Filters;
+using Core.Data.Infrastructure;
+using System.Reflection;
+using User.API.IRepository;
+using User.API.Repository;
 
 namespace User.API
 {
@@ -26,10 +30,35 @@ namespace User.API
             {
                 options.UseMySql(Configuration.GetConnectionString("MysqlUser"));
             });
+            services.AddDapperDBContext<UserDapperContext>(options =>
+            {
+                options.Configuration = Configuration["ConnectionStrings:MysqlUser"]; ;
+            });
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(GlobalExceptionFilter));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            RegisterRepository(services);
+        }
+
+        private void RegisterRepository(IServiceCollection services)
+        {
+            //services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IUserPropertyRepository, UserPropertyRepository>();
+
+            var assembly = Assembly.Load("User.API");
+            var allTypes = assembly.GetTypes().Where(t =>
+            t.GetTypeInfo().IsClass &&
+            !t.GetTypeInfo().IsAbstract &&
+            t.GetTypeInfo().Name.EndsWith("Repository"));
+            foreach (var type in allTypes)
+            {
+                var types = type.GetInterfaces();
+                foreach (var p in types)
+                {
+                    services.AddScoped(p, type);
+                }
+            }
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

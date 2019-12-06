@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Dapper.Contrib.Extensions;
 
 namespace User.API.Entity.Models
 {
+    [Table("UserProperties")]
     public class UserProperty
     {
+        [ExplicitKey]
         public int AppUserId { get; set; }
 
         public string Key { get; set; }
