@@ -46,7 +46,7 @@ namespace User.API
             //services.AddScoped<IUserRepository, UserRepository>();
             //services.AddScoped<IUserPropertyRepository, UserPropertyRepository>();
 
-            var assembly = Assembly.Load("User.API.Data");
+            var assembly = Assembly.Load("User.API");
             var allTypes = assembly.GetTypes().Where(t =>
             t.GetTypeInfo().IsClass &&
             !t.GetTypeInfo().IsAbstract &&
