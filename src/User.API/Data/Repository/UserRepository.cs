@@ -2,10 +2,10 @@
 using Dapper;
 using Dapper.Contrib.Extensions;
 using System.Threading.Tasks;
+using User.API.Data.IRepository;
 using User.API.Entity.Models;
-using User.API.IRepository;
 
-namespace User.API.Repository
+namespace User.API.Data.Repository
 {
     public class UserRepository : IUserRepository
     {

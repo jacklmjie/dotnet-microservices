@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Core.Data.Infrastructure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using User.API.Data;
+using User.API.Data.IRepository;
 using User.API.Entity.Models;
 using User.API.Filters;
-using User.API.IRepository;
 
 namespace User.API.Controllers
 {
@@ -45,64 +42,28 @@ namespace User.API.Controllers
                 .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
 
             if (user == null)
-                //return NotFound();
                 throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
 
             return Ok(user);
-        }
-
-        private async Task UnitOfWorkTest(AppUser user)
-        {
-            //mysql事务,参考https://fl.vu/mysql-trans
-            var unit = _unitOfWorkFactory.Create();
-            await _userPropertyRepository.Delete(user.Id);
-            user.Properties.ForEach(x => x.AppUserId = user.Id);
-            await _userPropertyRepository.Create(user.Properties);
-            unit.SaveChanges();
         }
 
         [Route("")]
         [HttpPatch]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
         {
-            var user = await _useContext.Users
-                .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
+            var user = await _userRepository.GetByContribAsync(UserIdentity.UserId);
 
             if (user == null)
                 throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
 
             patch.ApplyTo(user);
 
-            //await UnitOfWorkTest(user);
-            //return Ok(user);
-
-            var userProperties = user.Properties == null ? new List<UserProperty>() : user.Properties;
-            foreach (var property in userProperties)
-            {
-                _useContext.Entry(property).State = EntityState.Detached;
-            }
-
-            var originProperties = await _useContext.UserProperties
-                .AsNoTracking()
-                .Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
-            var allProperties = originProperties.Union(userProperties).Distinct();
-
-            var removeProperties = originProperties.Except(userProperties);
-            var newProperties = allProperties.Except(originProperties);
-
-            foreach (var property in removeProperties)
-            {
-                _useContext.Remove(property);
-            }
-
-            foreach (var property in newProperties)
-            {
-                _useContext.Add(property);
-            }
-
-            _useContext.Users.Update(user);
-            _useContext.SaveChanges();
-
+            //mysql事务,参考https://fl.vu/mysql-trans
+            var unit = _unitOfWorkFactory.Create();
+            await _userPropertyRepository.Delete(user.Id);
+            user.Properties.ForEach(x => x.AppUserId = user.Id);
+            await _userPropertyRepository.Create(user.Properties);
+            unit.SaveChanges();
             return Ok(user);
         }
     }
