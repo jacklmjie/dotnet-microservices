@@ -55,6 +55,23 @@ namespace User.API.Controllers
         [HttpPatch]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
         {
+            var user = await _useContext.Users
+               .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
+
+            if (user == null)
+                throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
+
+            patch.ApplyTo(user);
+
+            _useContext.Users.Update(user);
+            _useContext.SaveChanges();
+            return Ok(user);
+        }
+
+        [Route("PatchByUnit")]
+        [HttpPatch]
+        public async Task<ActionResult> PatchByUnit([FromBody]JsonPatchDocument<AppUser> patch)
+        {
             var user = await _userRepository.GetByContribAsync(UserIdentity.UserId);
 
             if (user == null)
