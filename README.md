@@ -39,4 +39,5 @@
 - [docker安装mysql命令]
 - [EF迁移命令](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
 - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
+- [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
 - [json patch](http://jsonpatch.com/)
