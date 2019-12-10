@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
 namespace User.API.Filters
 {
+    /// <summary>
+    /// 全局异常过滤器
+    /// </summary>
     public class GlobalExceptionFilter : IExceptionFilter
     {
         private readonly IHostingEnvironment _env;
@@ -19,7 +21,7 @@ namespace User.API.Filters
 
         public void OnException(ExceptionContext context)
         {
-            var json = new JsonErrorRresponse();
+            var json = new JsonErrorResponse();
             if (context.Exception.GetType() == typeof(UserOperationException))
             {
                 json.Message = context.Exception.Message;
@@ -38,13 +40,6 @@ namespace User.API.Filters
 
             _logger.LogError(context.Exception, context.Exception.Message);
             context.ExceptionHandled = true;
-        }
-    }
-    public class InternalServerErrorObjectResult : ObjectResult
-    {
-        public InternalServerErrorObjectResult(object error) : base(error)
-        {
-            StatusCode = StatusCodes.Status500InternalServerError;
         }
     }
 }

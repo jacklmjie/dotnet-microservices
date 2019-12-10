@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using User.API.Entity.Models;
 
-namespace User.API.IRepository
+namespace User.API.Data.IRepository
 {
     public interface IUserPropertyRepository
     {

@@ -10,8 +10,8 @@ using User.API.Entity.Models;
 using User.API.Filters;
 using Core.Data.Infrastructure;
 using System.Reflection;
-using User.API.IRepository;
-using User.API.Repository;
+using User.API.Data.IRepository;
+using User.API.Data.Repository;
 
 namespace User.API
 {
@@ -46,7 +46,7 @@ namespace User.API
             //services.AddScoped<IUserRepository, UserRepository>();
             //services.AddScoped<IUserPropertyRepository, UserPropertyRepository>();
 
-            var assembly = Assembly.Load("User.API");
+            var assembly = Assembly.Load("User.API.Data");
             var allTypes = assembly.GetTypes().Where(t =>
             t.GetTypeInfo().IsClass &&
             !t.GetTypeInfo().IsAbstract &&
@@ -72,6 +72,10 @@ namespace User.API
             InitUserDatabase(app);
         }
 
+        /// <summary>
+        /// 初始化数据库数据
+        /// </summary>
+        /// <param name="app"></param>
         public void InitUserDatabase(IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
