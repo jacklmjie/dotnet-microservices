@@ -1,12 +1,10 @@
-FROM microsoft/dotnet
-WORKDIR /app
-COPY . /app
-CMD ["dotnet","run"]
+# 指定基础镜像
+FROM microsoft/dotnet:2.2-aspnetcore-runtime
+# 维护者信息
+MAINTAINER mx "mx"
 
-#docker build -t jack/userapi:dev .
-#dotnet run --name userapidemo jack/userapi:dev
-#docker run --name userapidemo jack/userapi:dev
-#docker ps 
-#docker exec -it id bash
-#cd/
-#ls
+EXPOSE 5133
+# copy csproj and restore as distinct layers
+COPY  publish /data/www/
+WORKDIR /data/www
+ENTRYPOINT ["dotnet", "/data/www/User.API.dll"]
