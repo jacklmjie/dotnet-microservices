@@ -1,0 +1,17 @@
+variables:
+    REGISTRY: "hub.docker.com"
+
+stages:
+  - build
+  - deploy
+  
+
+build:
+  stage: build
+  script:
+    - cd src\User.API
+    - dotnet publish -c release
+    - cd ..
+    - mv User.API/bin/Release/netcoreapp2.2/publish/ publish
+
+#Î´Íê³É
