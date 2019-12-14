@@ -25,11 +25,14 @@
   - json patch介绍
   - json patch操作
   - json patch数组
-- docker 打包运行webapi
+- 单元测试
+  - xunit+Moq+MemoryEFDbContext测试UserController
+  - FluentAPI写UserController测试用例
+- 部署
+  - GitLab CI完整部署UserAPI到线上测试环境
 
 ### .NET WEB API实战二（用户服务）
 - jwt授权
-- 单元测试
 - 消息队列数据交互
 - 日志记录ELK
 - 健康检查
