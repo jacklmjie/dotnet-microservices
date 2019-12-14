@@ -1,17 +1,29 @@
-variables:
-    REGISTRY: "hub.docker.com"
-
 stages:
   - build
+  - test
+  - package
   - deploy
   
+restore:
+    stage:build
+    script:
+        - dotnet build
 
-build:
-  stage: build
-  script:
-    - cd src\User.API
-    - dotnet publish -c release
-    - cd ..
-    - mv User.API/bin/Release/netcoreapp2.2/publish/ publish
+unittest:
+    stage:test
+    script:dotnet test
 
-#Î´Íê³É
+package:
+    stage:package
+    script:
+        - cd src
+        - cd User.API
+        - docker build -t userapi:test .
+        - docker login -u testuser -p testpassword https://hub.docker.com/
+        - docker tag userapi:test hub.docker.com/userapi:test
+        - docker push hub.docker.com/userapi:test
+
+deploy:
+    stage:deploy
+    script:
+        - docker run -d -p 80:80 --link mysql01:db --name userapi hub.docker.com/userapi:test
