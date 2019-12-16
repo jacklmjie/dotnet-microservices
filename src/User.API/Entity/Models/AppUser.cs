@@ -26,6 +26,11 @@ namespace User.API.Entity.Models
         public int Age { get; set; }
 
         /// <summary>
+        /// 号码
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
         /// 用户属性列表
         /// </summary>
         public List<UserProperty> Properties { get; set; }
