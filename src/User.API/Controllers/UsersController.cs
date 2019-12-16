@@ -15,7 +15,7 @@ namespace User.API.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        private UserContext _useContext;
+        private UserContext _userContext;
         private ILogger<UsersController> _logger;
         private IUserRepository _userRepository;
         private IUserPropertyRepository _userPropertyRepository;
@@ -26,7 +26,7 @@ namespace User.API.Controllers
             IUserPropertyRepository userPropertyRepository,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _useContext = userContext;
+            _userContext = userContext;
             _logger = logger;
             _userRepository = userRepository;
             _userPropertyRepository = userPropertyRepository;
@@ -40,7 +40,7 @@ namespace User.API.Controllers
             //var user1 = await _userRepository.GetAsync(UserIdentity.UserId);
             //var user2 = await _userRepository.GetByContribAsync(UserIdentity.UserId);
 
-            var user = await _useContext.Users
+            var user = await _userContext.Users
                 .AsNoTracking()
                 .Include(p => p.Properties)
                 .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
@@ -55,7 +55,7 @@ namespace User.API.Controllers
         [HttpPatch]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
         {
-            var user = await _useContext.Users
+            var user = await _userContext.Users
                .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
 
             if (user == null)
@@ -63,8 +63,8 @@ namespace User.API.Controllers
 
             patch.ApplyTo(user);
 
-            _useContext.Users.Update(user);
-            _useContext.SaveChanges();
+            _userContext.Users.Update(user);
+            _userContext.SaveChanges();
             return Ok(user);
         }
 
@@ -86,6 +86,24 @@ namespace User.API.Controllers
             await _userPropertyRepository.Create(user.Properties);
             unit.SaveChanges();
             return Ok(user);
+        }
+
+        /// <summary>
+        /// 检查或者创建用户（当用户手机不存在时创建用户）
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        [Route("check-or-create")]
+        [HttpPost]
+        public async Task<ActionResult> CheckOrCreate(string phone)
+        {
+            //todo:做手机号码格式的验证
+            if (!await _userContext.Users.AnyAsync(u => u.Phone == phone))
+            {
+                _userContext.Users.Add(new AppUser() { Phone = phone });
+            }
+
+            return Ok();
         }
     }
 }
