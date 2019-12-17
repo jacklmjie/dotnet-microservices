@@ -33,7 +33,6 @@
 - 认证服务
   - User.Identity
   - ![](https://github.com/jacklmjie/microservices/blob/master/docs/%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1.png)
-
 ### .NET WEB API实战二（用户服务）
 - 消息队列数据交互
 - 日志记录ELK
