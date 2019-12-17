@@ -30,9 +30,11 @@
   - FluentAPI写UserController测试用例
 - 部署
   - GitLab CI完整部署UserAPI到线上测试环境
+- 认证服务
+  - User.Identity
+  - ![](https://github.com/jacklmjie/microservices/blob/master/docs/%E8%AE%A4%E8%AF%81%E6%9C%8D%E5%8A%A1.png)
 
 ### .NET WEB API实战二（用户服务）
-- jwt授权
 - 消息队列数据交互
 - 日志记录ELK
 - 健康检查
