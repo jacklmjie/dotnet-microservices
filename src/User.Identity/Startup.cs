@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using User.Identity.Services;
+using System.Net.Http;
 
 namespace User.Identity
 {
@@ -9,6 +10,18 @@ namespace User.Identity
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityServer()
+                .AddExtensionGrantValidator<Authentication.SmsAuthCodeValidator>()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources());
+
+            services.AddScoped<IAuthCodeService, TestAuthCodeService>()
+                .AddScoped<IUserService, UserService>();
+            services.AddSingleton(new HttpClient());
+
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -18,10 +31,8 @@ namespace User.Identity
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseIdentityServer();
+            app.UseMvc();
         }
     }
 }

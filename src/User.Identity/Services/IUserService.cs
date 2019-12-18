@@ -1,4 +1,6 @@
-﻿namespace User.Identity.Services
+﻿using System.Threading.Tasks;
+
+namespace User.Identity.Services
 {
     public interface IUserService
     {
@@ -6,6 +8,6 @@
         /// 检查手机号是否已注册,如果没有注册就注册一个用户
         /// </summary>
         /// <param name="phone"></param>
-        int CheckOrCreate(string phone);
+        Task<int> CheckOrCreateAsync(string phone);
     }
 }
