@@ -98,12 +98,16 @@ namespace User.API.Controllers
         public async Task<ActionResult> CheckOrCreate(string phone)
         {
             //todo:做手机号码格式的验证
-            if (!await _userContext.Users.AnyAsync(u => u.Phone == phone))
+
+            var user = await _userContext.Users.SingleOrDefaultAsync(u => u.Phone == phone);
+            if (user == null)
             {
-                _userContext.Users.Add(new AppUser() { Phone = phone });
+                user = new AppUser() { Phone = phone };
+                _userContext.Users.Add(user);
+                await _userContext.SaveChangesAsync();
             }
 
-            return Ok();
+            return Ok(user.Id);
         }
     }
 }

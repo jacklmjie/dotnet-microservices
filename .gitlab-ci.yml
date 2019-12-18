@@ -4,17 +4,20 @@ stages:
   - package
   - deploy
   
-restore:
-    stage:build
-    script:
+job1:
+    stage: build
+    script: 
         - dotnet build
 
-unittest:
-    stage:test
-    script:dotnet test
+job2:
+    stage: test
+    script:
+        - cd tests
+        - cd User.API.UnitTest
+        - dotnet test
 
-package:
-    stage:package
+job3:
+    stage: package
     script:
         - cd src
         - cd User.API
@@ -23,7 +26,7 @@ package:
         - docker tag userapi:test hub.docker.com/userapi:test
         - docker push hub.docker.com/userapi:test
 
-deploy:
-    stage:deploy
+job4:
+    stage: deploy
     script:
         - docker run -d -p 80:80 --link mysql01:db --name userapi hub.docker.com/userapi:test
