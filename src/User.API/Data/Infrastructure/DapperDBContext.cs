@@ -11,7 +11,7 @@ namespace Core.Data.Infrastructure
         private IDbConnection _connection;
         public IDbConnection Connection { get { return _connection; } }
         private IDbTransaction _transaction;
-        private int? _commandTimeout = null;
+        //private int? _commandTimeout = null;
         private readonly DapperDBContextOptions _options;
 
         public bool IsTransactionStarted { get; private set; }

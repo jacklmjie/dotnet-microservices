@@ -12,6 +12,7 @@ using Core.Data.Infrastructure;
 using System.Reflection;
 using User.API.Data.IRepository;
 using User.API.Data.Repository;
+using Microsoft.Extensions.Hosting;
 
 namespace User.API
 {
@@ -34,10 +35,11 @@ namespace User.API
             {
                 options.Configuration = Configuration["ConnectionStrings:MysqlUser"]; ;
             });
+            services.AddControllers();
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(GlobalExceptionFilter));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
             RegisterRepository(services);
         }
 
@@ -61,14 +63,18 @@ namespace User.API
             }
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             InitUserDatabase(app);
         }
 

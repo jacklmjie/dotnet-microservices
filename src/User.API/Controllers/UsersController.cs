@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using User.API.Data;
 using User.API.Data.IRepository;
+using User.API.Entity.Dtos;
 using User.API.Entity.Models;
 using User.API.Filters;
 
@@ -95,14 +96,17 @@ namespace User.API.Controllers
         /// <returns></returns>
         [Route("check-or-create")]
         [HttpPost]
-        public async Task<ActionResult> CheckOrCreate([FromBody] dynamic data)
+        public async Task<ActionResult> CheckOrCreate(AppUserCheckOrCreate dto)
         {
+            if (dto == null)
+            {
+                return NoContent();
+            }
             //todo:做手机号码格式的验证
-            string phone = data.phone;
-            var user = await _userContext.Users.SingleOrDefaultAsync(u => u.Phone == phone);
+            var user = await _userContext.Users.SingleOrDefaultAsync(u => u.Phone == dto.phone);
             if (user == null)
             {
-                user = new AppUser() { Phone = phone };
+                user = new AppUser() { Phone = dto.phone };
                 _userContext.Users.Add(user);
                 await _userContext.SaveChangesAsync();
             }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace User.API.Filters
@@ -10,9 +11,9 @@ namespace User.API.Filters
     /// </summary>
     public class GlobalExceptionFilter : IExceptionFilter
     {
-        private readonly IHostingEnvironment _env;
-        private ILogger<GlobalExceptionFilter> _logger;
-        public GlobalExceptionFilter(IHostingEnvironment env,
+        private readonly IWebHostEnvironment _env;
+        private readonly ILogger<GlobalExceptionFilter> _logger;
+        public GlobalExceptionFilter(IWebHostEnvironment env,
             ILogger<GlobalExceptionFilter> logger)
         {
             _env = env;
