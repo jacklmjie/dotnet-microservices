@@ -5,6 +5,7 @@ using User.Identity.Services;
 using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Hosting;
 
 namespace User.Identity
 {
@@ -29,15 +30,15 @@ namespace User.Identity
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
             app.UseIdentityServer();
-            app.UseMvc();
         }
     }
 }
