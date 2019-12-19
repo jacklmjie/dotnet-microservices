@@ -95,10 +95,10 @@ namespace User.API.Controllers
         /// <returns></returns>
         [Route("check-or-create")]
         [HttpPost]
-        public async Task<ActionResult> CheckOrCreate(string phone)
+        public async Task<ActionResult> CheckOrCreate([FromBody] dynamic data)
         {
             //todo:做手机号码格式的验证
-
+            string phone = data.phone;
             var user = await _userContext.Users.SingleOrDefaultAsync(u => u.Phone == phone);
             if (user == null)
             {

@@ -1,26 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace User.Identity.Services
 {
     public class UserService : IUserService
     {
-        private readonly string _userServiceUrl = "http://localhost:5000";
-        private HttpClient _httpClient;
-        public UserService(HttpClient httpClient)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public UserService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<int> CheckOrCreateAsync(string phone)
         {
-            var form = new Dictionary<string, string> { { "phone", phone } };
-            var content = new FormUrlEncodedContent(form);
-            //todo:phone没传过去
-            var response = await _httpClient.PostAsync(_userServiceUrl + "/api/users/check-or-create", content);
+            var httpClient = _httpClientFactory.CreateClient("user_api");
+            var json = JsonConvert.SerializeObject(new { phone });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var response = await httpClient.PostAsync("/api/users/check-or-create", content);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var userId = await response.Content.ReadAsStringAsync();

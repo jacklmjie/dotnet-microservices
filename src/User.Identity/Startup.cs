@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using User.Identity.Services;
 using System.Net.Http;
+using System;
+using System.Net.Http.Headers;
 
 namespace User.Identity
 {
@@ -19,8 +21,11 @@ namespace User.Identity
 
             services.AddScoped<IAuthCodeService, TestAuthCodeService>()
                 .AddScoped<IUserService, UserService>();
-            services.AddSingleton(new HttpClient());
-
+            services.AddHttpClient("user_api", c =>
+            {
+                c.BaseAddress = new Uri("http://localhost:5000");
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
             services.AddMvc();
         }
 
