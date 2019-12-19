@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace API.Gateway
+namespace Gateway.API
 {
     public class Program
     {
@@ -20,7 +20,15 @@ namespace API.Gateway
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                    .ConfigureAppConfiguration((hostingContext, builder) =>
+                    {
+                        builder
+                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                        .AddJsonFile("Ocelot.json");
+                    })
+                    .UseStartup<Startup>()
+                    .UseUrls("http://+:80");
                 });
     }
 }
