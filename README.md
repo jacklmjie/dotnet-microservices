@@ -2,7 +2,6 @@
 ### 用户服务
 - [x] docker安装
   - [x] [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
-  - [x] docker简单操作，配置阿里云加速，拉取镜像包
   - [x] docker安装mysql
     - [x] 直接运行
     - [x] 外部volume挂载资料卷
