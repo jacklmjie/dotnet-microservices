@@ -10,4 +10,9 @@ namespace User.API.Filters
 
         public UserOperationException(string message, Exception innerExpection) : base(message, innerExpection) { }
     }
+
+    public class PlatformNotSupportedException
+    {
+
+    }
 }
