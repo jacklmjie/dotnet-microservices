@@ -30,7 +30,8 @@
   - [x] [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
   - [x] Ocelot集成Identity Server鉴权
   - [x] [consul安装](https://www.cnblogs.com/PearlRan/p/11225953.html)
-  - [ ] conslu 服务注册与发现
+  - [x] [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
+  - [ ] Polly
 ### 接下来
 - 消息队列数据交互
 - 日志记录ELK
