@@ -32,8 +32,8 @@
   - [ ] [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
   - [x] [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
   - [x] [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-  - [ ] [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
-  - [ ] [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
+  - [x] [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
+  - [x] [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
 ### 接下来
 - 消息队列数据交互
 - 日志记录ELK
