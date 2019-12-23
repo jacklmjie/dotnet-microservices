@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using User.Identity.Services;
-using System.Net.Http;
 using Microsoft.Extensions.Hosting;
 using User.Identity.Dtos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using DnsClient;
+using System.Net.Http;
+using Polly;
+using Polly.Extensions.Http;
+using System;
 
 namespace User.Identity
 {
@@ -39,8 +42,23 @@ namespace User.Identity
 
             services.AddScoped<IAuthCodeService, TestAuthCodeService>()
                 .AddScoped<IUserService, UserService>();
-            services.AddSingleton(new HttpClient());
+            services.AddHttpClient<IUserService, UserService>()
+                .AddPolicyHandler(GetRetryPolicy()); ;
             services.AddMvc();
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            //重试3次，可以加熔断
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (msg, re) =>
+                {
+                    //log
+                    Console.WriteLine(msg.Result);
+                    Console.WriteLine(re.TotalSeconds);
+                });
         }
 
         public void Configure(IApplicationBuilder app,
