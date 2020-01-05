@@ -39,7 +39,7 @@ namespace User.API
             });
             services.AddDapperDBContext<UserDapperContext>(options =>
             {
-                options.Configuration = Configuration["ConnectionStrings:MysqlUser"]; ;
+                options.Configuration = Configuration["ConnectionStrings:MysqlUser"];
             });
             services.AddControllers();
             services.AddOptions();
