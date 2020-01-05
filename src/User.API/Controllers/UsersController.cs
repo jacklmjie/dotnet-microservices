@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Core.Data.Infrastructure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -112,6 +115,54 @@ namespace User.API.Controllers
             }
 
             return Ok(user.Id);
+        }
+
+        /// <summary>
+        /// 获取用户标签选项数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("tags")]
+        public async Task<ActionResult> GetUserTags()
+        {
+            var userTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
+            return Ok(userTags);
+        }
+
+        /// <summary>
+        /// 根据手机号码查询用户资料
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("search")]
+        public async Task<ActionResult> Search(string phone)
+        {
+            var userTags = await _userContext.Users.Include(u => u.Properties)
+                .SingleOrDefaultAsync(u => u.Phone == phone);
+            return Ok(userTags);
+        }
+
+        /// <summary>
+        /// 更新用户标签数据
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("tags")]
+        public async Task<ActionResult> UpdateUserTags([FromBody]List<string> tags)
+        {
+            var originTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
+            var newTags = tags.Except(originTags.Select(t => t.Tag));
+
+            await _userContext.UserTages.AddRangeAsync(newTags.Select(t => new UserTage
+            {
+                CreatedTime = DateTime.Now,
+                AppUserId = UserIdentity.UserId,
+                Tag = t
+            }));
+            await _userContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }
