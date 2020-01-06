@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using User.API.Data;
 using User.API.Data.IRepository;
-using User.API.Entity.Dtos;
-using User.API.Entity.Models;
+using User.API.Dtos;
+using User.API.Models;
 using User.API.Filters;
 
 namespace User.API.Controllers
@@ -19,19 +19,16 @@ namespace User.API.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        private UserContext _userContext;
-        private ILogger<UsersController> _logger;
-        private IUserRepository _userRepository;
-        private IUserPropertyRepository _userPropertyRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly UserContext _userContext;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserPropertyRepository _userPropertyRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         public UsersController(UserContext userContext,
-            ILogger<UsersController> logger,
             IUserRepository userRepository,
             IUserPropertyRepository userPropertyRepository,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
             _userContext = userContext;
-            _logger = logger;
             _userRepository = userRepository;
             _userPropertyRepository = userPropertyRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
