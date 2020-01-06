@@ -11,6 +11,8 @@ using System.Net.Http;
 using Polly;
 using Polly.Extensions.Http;
 using System;
+using User.Identity.Authentication;
+using IdentityServer4.Services;
 
 namespace User.Identity
 {
@@ -26,13 +28,14 @@ namespace User.Identity
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer()
-                .AddExtensionGrantValidator<Authentication.SmsAuthCodeValidator>()
+                .AddExtensionGrantValidator<SmsAuthCodeValidator>()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources());
 
             services.AddOptions();
+            services.AddTransient<IProfileService, ProfileServices>();
             services.Configure<ServiceDiscoveryOptions>(Configuration.GetSection("ServiceDiscovery"));
             services.AddSingleton<IDnsQuery>(p =>
             {
@@ -43,7 +46,7 @@ namespace User.Identity
             services.AddScoped<IAuthCodeService, TestAuthCodeService>()
                 .AddScoped<IUserService, UserService>();
             services.AddHttpClient<IUserService, UserService>()
-                .AddPolicyHandler(GetRetryPolicy()); ;
+                .AddPolicyHandler(GetRetryPolicy());
             services.AddMvc();
         }
 

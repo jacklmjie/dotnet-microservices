@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using User.Identity.Dtos;
+using Newtonsoft.Json;
 
 namespace User.Identity.Services
 {
@@ -32,7 +33,7 @@ namespace User.Identity.Services
             _userServiceUrl = $"http://{host}:{port}";
         }
 
-        public async Task<int> CheckOrCreateAsync(string phone)
+        public async Task<UserIdentity> CheckOrCreateAsync(string phone)
         {
             var json = JsonConvert.SerializeObject(new { phone });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -40,12 +41,11 @@ namespace User.Identity.Services
             var response = await _httpClient.PostAsync(_userServiceUrl + "/api/users/check-or-create", content);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var userId = await response.Content.ReadAsStringAsync();
-                int.TryParse(userId, out int intUserId);
-                return intUserId;
+                var result = await response.Content.ReadAsStringAsync();
+                var userIdentity = JsonConvert.DeserializeObject<UserIdentity>(result);
+                return userIdentity;
             }
-
-            return 0;
+            return null;
         }
     }
 }

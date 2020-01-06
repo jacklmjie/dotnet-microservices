@@ -110,8 +110,12 @@ namespace User.API.Controllers
                 _userContext.Users.Add(user);
                 await _userContext.SaveChangesAsync();
             }
-
-            return Ok(user.Id);
+            var userIdentity = new UserIdentity
+            {
+                UserId = user.Id,
+                Name = user.Name
+            };
+            return Ok(userIdentity);
         }
 
         /// <summary>
