@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using User.Identity.Services;
@@ -39,14 +40,19 @@ namespace User.Identity.Authentication
             }
 
             //完成用户注册
-            var userId = await _userService.CheckOrCreateAsync(phone);
-            if (userId <= 0)
+            var userIdentity = await _userService.CheckOrCreateAsync(phone);
+            if (userIdentity == null)
             {
                 context.Result = errorValidationResult;
                 return;
             }
 
-            context.Result = new GrantValidationResult(userId.ToString(), GrantType);
+            var claims = new Claim[]
+            {
+                new Claim("name",userIdentity.Name??string.Empty)
+            };
+
+            context.Result = new GrantValidationResult(userIdentity.UserId.ToString(), GrantType, claims);
         }
     }
 }
