@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace User.API.Entity.Dtos
+namespace User.API.Dtos
 {
     public class ServiceDiscoveryOptions
     {

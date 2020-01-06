@@ -3,7 +3,7 @@ using Dapper;
 using Dapper.Contrib.Extensions;
 using System.Threading.Tasks;
 using User.API.Data.IRepository;
-using User.API.Entity.Models;
+using User.API.Models;
 
 namespace User.API.Data.Repository
 {

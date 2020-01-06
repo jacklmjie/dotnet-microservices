@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace User.API.Entity.Models
+namespace User.API.Models
 {
     /// <summary>
     /// 用户属性

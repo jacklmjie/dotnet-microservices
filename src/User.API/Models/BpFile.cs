@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace User.API.Entity.Models
+namespace User.API.Models
 {
     /// <summary>
     /// 附件表

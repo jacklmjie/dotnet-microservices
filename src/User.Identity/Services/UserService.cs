@@ -24,7 +24,7 @@ namespace User.Identity.Services
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
             _httpClient = httpClient;
-            var address = dnsQuery.ResolveService("service.consul", options.Value.ServiceNameUserApi);
+            var address = dnsQuery.ResolveService("service.consul", options.Value.ServiceName);
             var addressList = address.First().AddressList;
             var host = addressList.Any() ?
                 addressList.First().ToString() : address.First().HostName.Substring(0, address.First().HostName.Length - 1);

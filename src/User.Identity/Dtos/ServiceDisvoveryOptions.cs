@@ -4,7 +4,7 @@ namespace User.Identity.Dtos
 {
     public class ServiceDiscoveryOptions
     {
-        public string ServiceNameUserApi { get; set; }
+        public string ServiceName { get; set; }
 
         public ConsulOptions Consul { get; set; }
     }
