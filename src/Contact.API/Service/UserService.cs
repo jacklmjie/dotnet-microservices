@@ -1,15 +1,14 @@
-﻿using DnsClient;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using User.Identity.Dtos;
+using Contact.API.Dtos;
+using DnsClient;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
-namespace User.Identity.Services
+namespace Contact.API.Service
 {
     public class UserService : IUserService
     {
@@ -32,12 +31,14 @@ namespace User.Identity.Services
             _userServiceUrl = $"http://{host}:{port}";
         }
 
-        public async Task<UserIdentity> CheckOrCreateAsync(string phone)
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<UserIdentity> GetUserAsync(int UserId)
         {
-            var json = JsonConvert.SerializeObject(new { phone });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync(_userServiceUrl + "/api/users/check-or-create", content);
+            var response = await _httpClient.GetAsync(_userServiceUrl + $"/api/users/identity/{UserId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var result = await response.Content.ReadAsStringAsync();

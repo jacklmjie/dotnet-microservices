@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace Contact.API.Models
 {
     /// <summary>
     /// 好友申请记录
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class ContactApplyRequest
     {
         /// <summary>

@@ -42,6 +42,7 @@ namespace User.API
                     options.RequireHttpsMetadata = false;
                     options.Audience = "user_api";
                     options.Authority = "http://localhost";
+                    options.SaveToken = true;
                 });
 
             services.AddDbContext<UserContext>(options =>
