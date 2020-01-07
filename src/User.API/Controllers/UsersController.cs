@@ -54,6 +54,28 @@ namespace User.API.Controllers
             return Ok(user);
         }
 
+        [Route("identity/{userId}")]
+        [HttpGet]
+        public async Task<ActionResult> GetUserIdentity(int userId)
+        {
+            //todo:检查用户是否好友关系
+
+            var user = await _userContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var identity = new UserIdentity()
+            {
+                UserId = user.Id,
+                Name = user.Name
+            };
+
+            return Ok(identity);
+        }
+
         [Route("")]
         [HttpPatch]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)

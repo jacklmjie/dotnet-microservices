@@ -9,6 +9,8 @@ using Contact.API.Data;
 using Contact.API.Service;
 using System.Threading;
 using Contact.API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Contact.API.Controllers
 {
@@ -35,6 +37,7 @@ namespace Contact.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get(CancellationToken cancellationToken)
         {
             var contacts = await _contactRepository.GetContactsAsync(UserIdentity.UserId);
@@ -49,6 +52,7 @@ namespace Contact.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("tag")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> TagContacts(TagContactInputViewModel viewModel, CancellationToken cancellationToken)
         {
             var result = await _contactRepository.TagContactsAsync(UserIdentity.UserId, viewModel.ContactId, viewModel.Tags, cancellationToken);
@@ -69,6 +73,7 @@ namespace Contact.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("apply-requests")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> GetApplyRequests(CancellationToken cancellationToken)
         {
             var requests = await _contactApplyRequestRepository.GetRequestListAsync(UserIdentity.UserId, cancellationToken);
@@ -83,6 +88,7 @@ namespace Contact.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("apply-requests/{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> AddApplyRequest(int userId, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserAsync(userId);
@@ -115,6 +121,7 @@ namespace Contact.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("apply-requests/{userId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> ApprovalApplyRequest(int userId, CancellationToken cancellationToken)
         {
             var result = await _contactApplyRequestRepository.ApprovalAsync(userId, UserIdentity.UserId, cancellationToken);
