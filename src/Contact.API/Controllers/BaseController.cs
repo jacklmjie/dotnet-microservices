@@ -12,11 +12,10 @@ namespace Contact.API.Controllers
         {
             get
             {
-                var nameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
                 var claimsIdentity = User.Identity as ClaimsIdentity;
                 var identity = new UserIdentity();
 
-                if (!int.TryParse(claimsIdentity.Claims.FirstOrDefault(x => x.Type == nameClaimType).Value, out int userId))
+                if (!int.TryParse(claimsIdentity.Claims.FirstOrDefault(x => x.Type == "sub")?.Value, out int userId))
                     throw new PlatformNotSupportedException("token错误");
 
                 identity.UserId = userId;
