@@ -18,6 +18,8 @@ using Consul;
 using Microsoft.Extensions.Options;
 using System;
 using Microsoft.AspNetCore.Http.Features;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace User.API
@@ -33,6 +35,15 @@ namespace User.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "user_api";
+                    options.Authority = "http://localhost";
+                });
+
             services.AddDbContext<UserContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("MysqlUser"));
@@ -123,7 +134,11 @@ namespace User.API
                     consul.Agent.ServiceDeregister(serviceId).GetAwaiter().GetResult();
                 });
             }
+
             app.UseRouting();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

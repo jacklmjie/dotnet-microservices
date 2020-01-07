@@ -6,12 +6,13 @@ using Core.Data.Infrastructure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using User.API.Data;
 using User.API.Data.IRepository;
 using User.API.Dtos;
 using User.API.Models;
 using User.API.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace User.API.Controllers
 {
@@ -36,6 +37,7 @@ namespace User.API.Controllers
 
         [Route("")]
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
         {
             //var user1 = await _userRepository.GetAsync(UserIdentity.UserId);

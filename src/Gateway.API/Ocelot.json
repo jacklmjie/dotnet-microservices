@@ -1,6 +1,30 @@
 {
   "ReRoutes": [
     {
+      "DownstreamPathTemplate": "/.well-known/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/.well-known/{catchAll}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/connect/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/{catchAll}",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/users",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -13,20 +37,8 @@
       "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "testkey",
-        "AllowedScopes": []
+        "AllowedScopes": [ "user_api" ]
       }
-    },
-    {
-      "DownstreamPathTemplate": "/connect/token",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5001
-        }
-      ],
-      "UpstreamPathTemplate": "/connect/token",
-      "UpstreamHttpMethod": [ "Post" ]
     },
     {
       "DownstreamPathTemplate": "/api/contacts",
@@ -38,7 +50,11 @@
         }
       ],
       "UpstreamPathTemplate": "/contacts",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "testkey",
+        "AllowedScopes": [ "contact_api" ]
+      }
     },
     {
       "DownstreamPathTemplate": "/api/contacts/tag",
@@ -62,7 +78,7 @@
         }
       ],
       "UpstreamPathTemplate": "/contacts/apply-requests",
-      "UpstreamHttpMethod": [ "Get,Post,Put" ]
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {
