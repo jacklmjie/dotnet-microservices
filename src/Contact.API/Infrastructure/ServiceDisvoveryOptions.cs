@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace User.Identity.Dtos
+namespace Contact.API.Infrastructure
 {
     public class ServiceDiscoveryOptions
     {

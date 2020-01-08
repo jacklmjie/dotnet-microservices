@@ -8,13 +8,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using User.Identity.Dtos;
+using User.Identity.Infrastructure;
 
 namespace User.Identity.Services
 {
     public class UserService : IUserService
     {
         private readonly HttpClient _httpClient;
-        private string _userServiceUrl;
+        private readonly string _userServiceUrl;
         public UserService(HttpClient httpClient,
             IDnsQuery dnsQuery,
             IOptions<ServiceDiscoveryOptions> options)
