@@ -30,6 +30,7 @@ namespace Contact.API
             {
                 options = Configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
             });
+            services.AddMyCap(Configuration.GetSection("CapOptions").Get<CapOptions>());
             services.AddMyAuthentication();
 
             services.AddSingleton(new HttpClient());

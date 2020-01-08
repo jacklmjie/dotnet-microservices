@@ -11,6 +11,7 @@ using User.API.Models;
 using User.API.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DotNetCore.CAP;
 
 namespace User.API.Controllers
 {
@@ -19,9 +20,25 @@ namespace User.API.Controllers
     public class UsersController : BaseController
     {
         private readonly UserContext _userContext;
-        public UsersController(UserContext userContext)
+        private readonly ICapPublisher _capPublisher;
+        public UsersController(UserContext userContext,
+            ICapPublisher capPublisher)
         {
             _userContext = userContext;
+            _capPublisher = capPublisher;
+        }
+
+        private void UserPatchChangedEvent(AppUser user)
+        {
+            if (_userContext.Entry(user).Property(nameof(user.Name)).IsModified)
+            {
+                var identity = new Dtos.UserIdentity()
+                {
+                    UserId = user.Id,
+                    Name = user.Name
+                };
+                _capPublisher.Publish("user.api.user_patch_change_event", identity);
+            }
         }
 
         [Route("")]
@@ -74,8 +91,14 @@ namespace User.API.Controllers
 
             patch.ApplyTo(user);
 
-            _userContext.Users.Update(user);
-            _userContext.SaveChanges();
+            using (var transaction = _userContext.Database.BeginTransaction())
+            {
+                UserPatchChangedEvent(user);
+                _userContext.Users.Update(user);
+                _userContext.SaveChanges();
+                transaction.Commit();
+            }
+
             return Ok(user);
         }
 

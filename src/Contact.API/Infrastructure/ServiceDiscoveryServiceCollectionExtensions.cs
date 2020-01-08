@@ -1,4 +1,5 @@
 ﻿using DnsClient;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -11,19 +12,19 @@ namespace Contact.API.Infrastructure
     public static class ServiceDiscoveryServiceCollectionExtensions
     {
         public static IServiceCollection AddMyServiceDiscovery(this IServiceCollection services,
-            Action<ServiceDiscoveryOptions> setupAction)
+            IConfigurationSection section)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (setupAction == null)
+            if (section == null)
             {
-                throw new ArgumentNullException(nameof(setupAction));
+                throw new ArgumentNullException(nameof(section));
             }
 
-            services.Configure(setupAction);
+            services.Configure<ServiceDiscoveryOptions>(section);
             services.AddSingleton<IDnsQuery>(p =>
             {
                 var serviceConfiguration = p.GetRequiredService<IOptions<ServiceDiscoveryOptions>>().Value;
