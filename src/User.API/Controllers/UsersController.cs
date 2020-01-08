@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Data.Infrastructure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using User.API.Data;
-using User.API.Data.IRepository;
 using User.API.Dtos;
 using User.API.Models;
 using User.API.Filters;
@@ -21,18 +19,9 @@ namespace User.API.Controllers
     public class UsersController : BaseController
     {
         private readonly UserContext _userContext;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserPropertyRepository _userPropertyRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        public UsersController(UserContext userContext,
-            IUserRepository userRepository,
-            IUserPropertyRepository userPropertyRepository,
-            IUnitOfWorkFactory unitOfWorkFactory)
+        public UsersController(UserContext userContext)
         {
             _userContext = userContext;
-            _userRepository = userRepository;
-            _userPropertyRepository = userPropertyRepository;
-            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         [Route("")]
@@ -40,9 +29,6 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
         {
-            //var user1 = await _userRepository.GetAsync(UserIdentity.UserId);
-            //var user2 = await _userRepository.GetByContribAsync(UserIdentity.UserId);
-
             var user = await _userContext.Users
                 .AsNoTracking()
                 .Include(p => p.Properties)
@@ -90,26 +76,6 @@ namespace User.API.Controllers
 
             _userContext.Users.Update(user);
             _userContext.SaveChanges();
-            return Ok(user);
-        }
-
-        [Route("PatchByUnit")]
-        [HttpPatch]
-        public async Task<ActionResult> PatchByUnit([FromBody]JsonPatchDocument<AppUser> patch)
-        {
-            var user = await _userRepository.GetByContribAsync(UserIdentity.UserId);
-
-            if (user == null)
-                throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
-
-            patch.ApplyTo(user);
-
-            //mysql事务,参考https://fl.vu/mysql-trans
-            var unit = _unitOfWorkFactory.Create();
-            await _userPropertyRepository.Delete(user.Id);
-            user.Properties.ForEach(x => x.AppUserId = user.Id);
-            await _userPropertyRepository.Create(user.Properties);
-            unit.SaveChanges();
             return Ok(user);
         }
 

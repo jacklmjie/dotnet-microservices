@@ -9,8 +9,8 @@ namespace Contact.API.Data
 {
     public class MongoContactApplyRequestRepository : IContactApplyRequestRepository
     {
-        private readonly ContactContext _contactContext;
-        public MongoContactApplyRequestRepository(ContactContext contactContext)
+        private readonly ContactDBContext _contactContext;
+        public MongoContactApplyRequestRepository(ContactDBContext contactContext)
         {
             _contactContext = contactContext;
         }

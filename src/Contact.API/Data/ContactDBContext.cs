@@ -3,21 +3,22 @@ using Contact.API.Models;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Collections.Generic;
+using Contact.API.Infrastructure;
 
 namespace Contact.API.Data
 {
-    public class ContactContext
+    public class ContactDBContext
     {
         private IMongoDatabase _database;
-        private ContactOptions _options;
+        private ContactDBContextSettings _options;
 
-        public ContactContext(IOptionsSnapshot<ContactOptions> options)
+        public ContactDBContext(IOptions<ContactDBContextSettings> options)
         {
             _options = options.Value;
-            var client = new MongoClient(_options.MongoConnectionString);
+            var client = new MongoClient(_options.ConnectionString);
             if (client != null)
             {
-                _database = client.GetDatabase(_options.MongoDatabase);
+                _database = client.GetDatabase(_options.DatabaseName);
             }
         }
 
@@ -31,15 +32,14 @@ namespace Contact.API.Data
             {
                 _database.CreateCollection(collectionName);
             }
-
         }
 
         public IMongoCollection<ContactBook> ContactBooks
         {
             get
             {
-                CheckAndCreateCollection("ContactBooks");
-                return _database.GetCollection<ContactBook>("ContactBooks");
+                CheckAndCreateCollection(_options.ContactBooksCollectionName);
+                return _database.GetCollection<ContactBook>(_options.ContactBooksCollectionName);
             }
         }
 
@@ -47,8 +47,8 @@ namespace Contact.API.Data
         {
             get
             {
-                CheckAndCreateCollection("ContactApplyRequests");
-                return _database.GetCollection<ContactApplyRequest>("ContactApplyRequests");
+                CheckAndCreateCollection(_options.ContactApplyRequestsCollectionName);
+                return _database.GetCollection<ContactApplyRequest>(_options.ContactApplyRequestsCollectionName);
             }
         }
     }

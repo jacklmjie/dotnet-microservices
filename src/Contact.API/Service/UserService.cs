@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Contact.API.Dtos;
+using Contact.API.Infrastructure;
 using DnsClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
