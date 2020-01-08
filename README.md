@@ -11,9 +11,9 @@
   - [x] 数据初始化
 - [x] dapper操作数据
   - [x] [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
-  - [x] dapper contain使用
-  - [x] dapper仓储在webapi的使用
-  - [x] dapper事务，工作单元应用
+  - [ ] dapper contain使用
+  - [ ] dapper仓储在webapi的使用
+  - [ ] dapper事务，工作单元应用
 - [x] webapi Restful
   - [x] [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
   - [x] PostMan工具的使用
