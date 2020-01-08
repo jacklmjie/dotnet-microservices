@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -16,19 +17,19 @@ namespace User.API.Infrastructure
     public static class ServiceDiscoveryServiceCollectionExtensions
     {
         public static IServiceCollection AddMyConsul(this IServiceCollection services,
-            Action<ServiceDiscoveryOptions> setupAction)
+            IConfigurationSection section)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (setupAction == null)
+            if (section == null)
             {
-                throw new ArgumentNullException(nameof(setupAction));
+                throw new ArgumentNullException(nameof(section));
             }
 
-            services.Configure(setupAction);
+            services.Configure<ServiceDiscoveryOptions>(section);
             services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
             {
                 var serviceConfiguration = p.GetRequiredService<IOptions<ServiceDiscoveryOptions>>().Value;

@@ -21,10 +21,7 @@ namespace User.Identity
         {
             services.AddOptions();
             services.AddMyIdentityServer();
-            services.AddMyServiceDiscovery(options =>
-            {
-                options = Configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-            });
+            services.AddMyServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
 
             services.AddScoped<IAuthCodeService, TestAuthCodeService>()
                 .AddScoped<IUserService, UserService>();

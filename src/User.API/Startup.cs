@@ -1,17 +1,16 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using User.API.Data;
 using Microsoft.EntityFrameworkCore;
-using User.API.Models;
 using User.API.Filters;
 using Microsoft.Extensions.Hosting;
 using Consul;
 using Microsoft.Extensions.Options;
 using User.API.Infrastructure;
+using System;
 
 namespace User.API
 {
@@ -31,10 +30,8 @@ namespace User.API
             {
                 options.UseMySql(Configuration.GetConnectionString("MysqlUser"));
             });
-            services.AddMyConsul(options =>
-            {
-                options = Configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-            });
+            services.AddMyConsul(Configuration.GetSection("ServiceDiscovery"));
+            services.AddMyCap(Configuration.GetSection("CapOptions"));
             services.AddMyAuthentication();
             services.AddControllers();
             services.AddMvc(options =>

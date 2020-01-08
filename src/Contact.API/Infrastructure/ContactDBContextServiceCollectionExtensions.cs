@@ -1,4 +1,5 @@
 ﻿using Contact.API.Data;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -10,19 +11,19 @@ namespace Contact.API.Infrastructure
     public static class ContactDBContextServiceCollectionExtensions
     {
         public static IServiceCollection AddMyContactDBContext<T>(this IServiceCollection services,
-            Action<ContactDBContextSettings> setupAction)
+            IConfigurationSection section)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (setupAction == null)
+            if (section == null)
             {
-                throw new ArgumentNullException(nameof(setupAction));
+                throw new ArgumentNullException(nameof(section));
             }
 
-            services.Configure(setupAction);
+            services.Configure<ContactDBContextSettings>(section);
             services.AddScoped<IContactApplyRequestRepository, MongoContactApplyRequestRepository>()
                  .AddScoped<IContactRepository, MongoContactRepository>()
                  .AddScoped<ContactDBContext>();
