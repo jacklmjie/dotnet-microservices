@@ -22,15 +22,9 @@ namespace Contact.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddMyContactDBContext<ContactDBContext>(options =>
-            {
-                options = Configuration.GetSection("ContactDBContextSettings").Get<ContactDBContextSettings>();
-            });
-            services.AddMyServiceDiscovery(options =>
-            {
-                options = Configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-            });
-            services.AddMyCap(Configuration.GetSection("CapOptions").Get<CapOptions>());
+            services.AddMyContactDBContext<ContactDBContext>(Configuration.GetSection("ContactDBContextSettings"));
+            services.AddMyServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
+            services.AddMyCap(Configuration.GetSection("CapOptions"));
             services.AddMyAuthentication();
 
             services.AddSingleton(new HttpClient());
