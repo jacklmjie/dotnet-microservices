@@ -81,6 +81,7 @@ namespace User.API.Controllers
 
         [Route("")]
         [HttpPatch]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
         {
             var user = await _userContext.Users
@@ -137,6 +138,7 @@ namespace User.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("tags")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> GetUserTags()
         {
             var userTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
@@ -164,6 +166,7 @@ namespace User.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("tags")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> UpdateUserTags([FromBody]List<string> tags)
         {
             var originTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();

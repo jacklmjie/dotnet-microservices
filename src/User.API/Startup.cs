@@ -33,7 +33,7 @@ namespace User.API
             services.AddMyConsul(Configuration.GetSection("ServiceDiscovery"));
             services.AddMyCap(Configuration.GetSection("CapOptions"));
             services.AddMyAuthentication();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(GlobalExceptionFilter));

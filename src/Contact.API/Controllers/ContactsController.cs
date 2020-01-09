@@ -18,9 +18,9 @@ namespace Contact.API.Controllers
     [ApiController]
     public class ContactsController : BaseController
     {
-        private IContactApplyRequestRepository _contactApplyRequestRepository;
-        private IContactRepository _contactRepository;
-        private IUserService _userService;
+        private readonly IContactApplyRequestRepository _contactApplyRequestRepository;
+        private readonly IContactRepository _contactRepository;
+        private readonly IUserService _userService;
         public ContactsController(IContactApplyRequestRepository contactApplyRequestRep,
             IContactRepository contactRepository,
             IUserService userService)
@@ -38,7 +38,7 @@ namespace Contact.API.Controllers
         [HttpGet]
         [Route("")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Get(CancellationToken cancellationToken)
+        public async Task<ActionResult> Get()
         {
             var contacts = await _contactRepository.GetContactsAsync(UserIdentity.UserId);
             return Ok(contacts);

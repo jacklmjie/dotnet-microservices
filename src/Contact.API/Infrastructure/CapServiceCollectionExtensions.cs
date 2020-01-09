@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP.Dashboard.NodeDiscovery;
+﻿using Contact.API.Event;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -21,6 +22,7 @@ namespace Contact.API.Infrastructure
             }
 
             services.Configure<CapOptions>(section);
+            services.AddTransient<ISubscriberService, SubscriberService>();
 
             var options = section.Get<CapOptions>();
             services.AddCap(x =>
