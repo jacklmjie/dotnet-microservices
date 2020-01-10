@@ -24,8 +24,10 @@
   - [x] FluentAPI写UserController测试用例
 - [x] 部署
   - [x] GitLab CI完整部署UserAPI到线上测试环境
-- [x] 授权服务
+### 网关与认证
+  - [x] 授权服务
   - [x] User.Identity
+  - 获取profile(再次从网关把token传了一次 oceloct自带的传递方式暂未实现)
 - [ ] 网关
   - [x] [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
   - [x] Ocelot集成Identity Server鉴权
@@ -36,10 +38,11 @@
   - [x] [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
 ### 通讯录服务
  - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
-### 接下来
-- 消息队列数据交互
-- 日志记录ELK
-- 健康检查
+ - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
+ - [CAP集成RabbitMq](https://github.com/dotnetcore/CAP)
+### 项目推荐服务
+  - 三层,OOO和DDD区别
+  - CQRS
 
 ## 参考资料
 - [docker安装mysql命令]
