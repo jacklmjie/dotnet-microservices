@@ -25,9 +25,10 @@
 - [x] 部署
   - [x] GitLab CI完整部署UserAPI到线上测试环境
 ### 网关与认证
-  - [x] 授权服务
+- [ ] 授权服务
   - [x] User.Identity
-  - 获取profile(再次从网关把token传了一次 oceloct自带的传递方式暂未实现)
+  - [x] 获取profile(再次从网关把token传了一次)
+  - [ ] oceloct自带传递方式
 - [ ] 网关
   - [x] [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
   - [x] Ocelot集成Identity Server鉴权
