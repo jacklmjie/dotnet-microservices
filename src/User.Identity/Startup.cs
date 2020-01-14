@@ -5,6 +5,8 @@ using User.Identity.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using User.Identity.Infrastructure;
+using IdentityServer4.Services;
+using User.Identity.Authentication;
 
 namespace User.Identity
 {
@@ -20,12 +22,20 @@ namespace User.Identity
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddMyIdentityServer();
-            services.AddMyServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
+            services.AddTransient<IProfileService, ProfileServices>();
+
+            services.AddIdentityServer()
+               .AddExtensionGrantValidator<SmsAuthCodeValidator>()
+               .AddDeveloperSigningCredential()
+               .AddInMemoryClients(Config.GetClients())
+               .AddInMemoryIdentityResources(Config.GetIdentityResources())
+               .AddInMemoryApiResources(Config.GetApiResources());
+
+            services.AddServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
 
             services.AddScoped<IAuthCodeService, TestAuthCodeService>()
                 .AddScoped<IUserService, UserService>();
-            services.AddMyPolicy();
+            services.AddPolicy();
 
             services.AddMvc();
         }

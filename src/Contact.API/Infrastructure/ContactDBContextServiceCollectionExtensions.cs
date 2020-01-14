@@ -10,7 +10,7 @@ namespace Contact.API.Infrastructure
     /// </summary>
     public static class ContactDBContextServiceCollectionExtensions
     {
-        public static IServiceCollection AddMyContactDBContext<T>(this IServiceCollection services,
+        public static IServiceCollection AddContactDBContext<T>(this IServiceCollection services,
             IConfigurationSection section)
         {
             if (services == null)
