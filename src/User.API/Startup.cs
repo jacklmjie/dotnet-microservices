@@ -11,6 +11,10 @@ using Consul;
 using Microsoft.Extensions.Options;
 using User.API.Infrastructure;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
+using DotNetCore.CAP;
 
 namespace User.API
 {
@@ -30,9 +34,31 @@ namespace User.API
             {
                 options.UseMySql(Configuration.GetConnectionString("MysqlUser"));
             });
-            services.AddMyConsul(Configuration.GetSection("ServiceDiscovery"));
-            services.AddMyCap(Configuration.GetSection("CapOptions"));
-            services.AddMyAuthentication();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "user_api";
+                    options.Authority = "http://localhost";
+                    options.SaveToken = true;
+                });
+            services.AddCap(x =>
+            {
+                x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
+                x.UseRabbitMQ("localhost");
+                x.UseDashboard();
+                x.UseDiscovery(d =>
+                {
+                    d.DiscoveryServerHostName = "localhost";
+                    d.DiscoveryServerPort = 8500;
+                    d.CurrentNodeHostName = "localhost";
+                    d.CurrentNodePort = 5000;
+                    d.NodeId = "1";
+                    d.NodeName = "CAP No.1 Node";
+                });
+            });
+            services.AddServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
             services.AddControllers().AddNewtonsoftJson();
             services.AddMvc(options =>
             {
@@ -51,7 +77,7 @@ namespace User.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMyConsul(appLife, serviceOptions, consul);
+            app.UseServiceDiscovery(appLife, serviceOptions, consul);
 
             app.UseRouting();
 

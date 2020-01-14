@@ -16,7 +16,7 @@ namespace User.API.Infrastructure
     /// </summary>
     public static class ServiceDiscoveryServiceCollectionExtensions
     {
-        public static IServiceCollection AddMyConsul(this IServiceCollection services,
+        public static IServiceCollection AddServiceDiscovery(this IServiceCollection services,
             IConfigurationSection section)
         {
             if (services == null)
@@ -52,7 +52,7 @@ namespace User.API.Infrastructure
         /// <param name="serviceOptions"></param>
         /// <param name="consul"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseMyConsul(this IApplicationBuilder app,
+        public static IApplicationBuilder UseServiceDiscovery(this IApplicationBuilder app,
             IHostApplicationLifetime appLife,
             IOptions<ServiceDiscoveryOptions> serviceOptions,
             IConsulClient consul)

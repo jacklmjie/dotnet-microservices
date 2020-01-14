@@ -11,7 +11,7 @@ namespace User.Identity.Infrastructure
     /// </summary>
     public static class ServiceDiscoveryServiceCollectionExtensions
     {
-        public static IServiceCollection AddMyServiceDiscovery(this IServiceCollection services,
+        public static IServiceCollection AddServiceDiscovery(this IServiceCollection services,
             IConfigurationSection section)
         {
             if (services == null)

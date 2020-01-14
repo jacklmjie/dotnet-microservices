@@ -12,7 +12,7 @@ namespace User.Identity.Infrastructure
     /// </summary>
     public static class PolicyServerCollectionExtensions
     {
-        public static IServiceCollection AddMyPolicy(this IServiceCollection services)
+        public static IServiceCollection AddPolicy(this IServiceCollection services)
         {
             if (services == null)
             {
