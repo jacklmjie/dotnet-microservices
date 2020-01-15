@@ -5,26 +5,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using User.API.Data;
 using User.API.Dtos;
 using User.API.Models;
-using User.API.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using DotNetCore.CAP;
+using User.API.Infrastructure.Exceptions;
+using User.API.Infrastructure;
+using User.API.Infrastructure.Services;
 
 namespace User.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : BaseController
+    public class UsersController : ControllerBase
     {
         private readonly UserContext _userContext;
+        private readonly IIdentityService _identityService;
         private readonly ICapPublisher _capPublisher;
         public UsersController(UserContext userContext,
+            IIdentityService identityService,
             ICapPublisher capPublisher)
         {
             _userContext = userContext;
+            _identityService = identityService;
             _capPublisher = capPublisher;
         }
 
@@ -32,7 +36,7 @@ namespace User.API.Controllers
         {
             if (_userContext.Entry(user).Property(nameof(user.Name)).IsModified)
             {
-                var identity = new Dtos.UserIdentity()
+                var identity = new UserIdentityDTO()
                 {
                     UserId = user.Id,
                     Name = user.Name
@@ -46,13 +50,15 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
         {
+            var userId = _identityService.GetUserIdentity();
+
             var user = await _userContext.Users
                 .AsNoTracking()
                 .Include(p => p.Properties)
-                .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
+                .SingleOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
-                throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
+                throw new UserDomainException($"错误的用户上下文Id={userId}");
 
             return Ok(user);
         }
@@ -70,7 +76,7 @@ namespace User.API.Controllers
                 return NotFound();
             }
 
-            var identity = new UserIdentity()
+            var identity = new UserIdentityDTO()
             {
                 UserId = user.Id,
                 Name = user.Name
@@ -84,11 +90,13 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
         {
+            var userId = _identityService.GetUserIdentity();
+
             var user = await _userContext.Users
-               .SingleOrDefaultAsync(u => u.Id == UserIdentity.UserId);
+               .SingleOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
-                throw new UserOperationException($"错误的用户上下文Id={UserIdentity.UserId}");
+                throw new UserDomainException($"错误的用户上下文Id={userId}");
 
             patch.ApplyTo(user);
 
@@ -110,7 +118,7 @@ namespace User.API.Controllers
         /// <returns></returns>
         [Route("check-or-create")]
         [HttpPost]
-        public async Task<ActionResult> CheckOrCreate(AppUserCheckOrCreate dto)
+        public async Task<ActionResult> CheckOrCreate(AppUserCheckOrCreateDTO dto)
         {
             if (dto == null)
             {
@@ -124,7 +132,7 @@ namespace User.API.Controllers
                 _userContext.Users.Add(user);
                 await _userContext.SaveChangesAsync();
             }
-            var userIdentity = new UserIdentity
+            var userIdentity = new UserIdentityDTO
             {
                 UserId = user.Id,
                 Name = user.Name
@@ -141,7 +149,9 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> GetUserTags()
         {
-            var userTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
+            var userId = _identityService.GetUserIdentity();
+
+            var userTags = await _userContext.UserTages.Where(u => u.AppUserId == userId).ToListAsync();
             return Ok(userTags);
         }
 
@@ -169,13 +179,15 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> UpdateUserTags([FromBody]List<string> tags)
         {
-            var originTags = await _userContext.UserTages.Where(u => u.AppUserId == UserIdentity.UserId).ToListAsync();
+            var userId = _identityService.GetUserIdentity();
+
+            var originTags = await _userContext.UserTages.Where(u => u.AppUserId == userId).ToListAsync();
             var newTags = tags.Except(originTags.Select(t => t.Tag));
 
             await _userContext.UserTages.AddRangeAsync(newTags.Select(t => new UserTage
             {
                 CreatedTime = DateTime.Now,
-                AppUserId = UserIdentity.UserId,
+                AppUserId = userId,
                 Tag = t
             }));
             await _userContext.SaveChangesAsync();
