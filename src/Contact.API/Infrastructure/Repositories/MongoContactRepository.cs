@@ -6,7 +6,7 @@ using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Contact.API.Data
+namespace Contact.API.Infrastructure.Repositories
 {
     public class MongoContactRepository : IContactRepository
     {
@@ -16,7 +16,7 @@ namespace Contact.API.Data
             _contactContext = contactContext;
         }
 
-        public async Task<bool> AddContactInfoAsync(int userId, UserIdentity contact, CancellationToken cancellationToken)
+        public async Task<bool> AddContactInfoAsync(int userId, UserIdentityDTO contact, CancellationToken cancellationToken)
         {
             if (_contactContext.ContactBooks.CountDocuments(x => x.UserId == userId) == 0)
             {
@@ -59,7 +59,7 @@ namespace Contact.API.Data
             return result.MatchedCount == result.ModifiedCount;
         }
 
-        public async Task<bool> UpdateContactInfoAsync(UserIdentity user, CancellationToken cancellationToken)
+        public async Task<bool> UpdateContactInfoAsync(UserIdentityDTO user, CancellationToken cancellationToken)
         {
             var contactBook = (await _contactContext.ContactBooks.FindAsync(x => x.UserId == user.UserId, null, cancellationToken)).FirstOrDefault(cancellationToken);
             if (contactBook == null)

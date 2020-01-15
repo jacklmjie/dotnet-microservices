@@ -1,9 +1,9 @@
-﻿using Contact.API.Data;
-using Contact.API.Dtos;
+﻿using Contact.API.Dtos;
+using Contact.API.Infrastructure.Repositories;
 using DotNetCore.CAP;
 using System.Threading;
 
-namespace Contact.API.Event
+namespace Contact.API.Infrastructure.Event
 {
     public class SubscriberService : ISubscriberService, ICapSubscribe
     {
@@ -14,7 +14,7 @@ namespace Contact.API.Event
         }
 
         [CapSubscribe("user.api.user_patch_change_event")]
-        public void UserPatchChangedEvent(UserIdentity identity)
+        public void UserPatchChangedEvent(UserIdentityDTO identity)
         {
             var token = new CancellationToken();
             _contactRepository.UpdateContactInfoAsync(identity, token);

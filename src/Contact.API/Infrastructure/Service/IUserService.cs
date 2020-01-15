@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Contact.API.Dtos;
 
-namespace Contact.API.Service
+namespace Contact.API.Infrastructure.Services
 {
     public interface IUserService
     {
@@ -10,6 +10,6 @@ namespace Contact.API.Service
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        Task<UserIdentity> GetUserAsync(int UserId);
+        Task<UserIdentityDTO> GetUserAsync(int UserId);
     }
 }

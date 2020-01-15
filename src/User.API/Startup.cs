@@ -80,14 +80,15 @@ namespace User.API
         public static IServiceCollection AddCustomIntegrations(this IServiceCollection services)
         {
             services.AddOptions();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
 
             return services;
         }
 
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IIdentityService, IdentityService>();
+
             //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
             services.AddAuthentication(options =>

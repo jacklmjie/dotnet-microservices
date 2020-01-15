@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Contact.API.Dtos;
 
-namespace Contact.API.Data
+namespace Contact.API.Infrastructure.Repositories
 {
     public interface IContactRepository
     {
@@ -15,7 +15,7 @@ namespace Contact.API.Data
         /// <param name="user"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> UpdateContactInfoAsync(UserIdentity user, CancellationToken cancellationToken);
+        Task<bool> UpdateContactInfoAsync(UserIdentityDTO user, CancellationToken cancellationToken);
 
         /// <summary>
         /// 添加联系人信息
@@ -24,7 +24,7 @@ namespace Contact.API.Data
         /// <param name="contact"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> AddContactInfoAsync(int userId, UserIdentity contact, CancellationToken cancellationToken);
+        Task<bool> AddContactInfoAsync(int userId, UserIdentityDTO contact, CancellationToken cancellationToken);
 
         /// <summary>
         /// 获取联系人列表
