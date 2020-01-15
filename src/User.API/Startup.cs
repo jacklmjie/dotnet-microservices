@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Consul;
-using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
@@ -137,7 +136,6 @@ namespace User.API
                     cfg.Address = new Uri(options.Consul.HttpEndpoint);
                 }
             }));
-            services.AddSingleton<IServiceDiscovery, ConsulServiceDiscovery>();
 
             return services;
         }
