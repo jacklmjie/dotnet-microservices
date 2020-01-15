@@ -1,4 +1,4 @@
-﻿namespace User.Identity.Services
+﻿namespace User.Identity.Infrastructure.Services
 {
     public class TestAuthCodeService : IAuthCodeService
     {

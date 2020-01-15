@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using User.Identity.Services;
+using User.Identity.Infrastructure.Services;
 
 namespace User.Identity.Authentication
 {
