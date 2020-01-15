@@ -1,18 +1,15 @@
-﻿using Dapper.Contrib.Extensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace User.API.Models
 {
     /// <summary>
     /// 用户表
     /// </summary>
-    [Table("Users")]
     public class AppUser
     {
         /// <summary>
         /// Id
         /// </summary>
-        [Key]
         public int Id { get; set; }
 
         /// <summary>

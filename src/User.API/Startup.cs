@@ -3,18 +3,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using User.API.Data;
 using Microsoft.EntityFrameworkCore;
-using User.API.Filters;
 using Microsoft.Extensions.Hosting;
 using Consul;
 using Microsoft.Extensions.Options;
-using User.API.Infrastructure;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
-using DotNetCore.CAP;
+using User.API.Infrastructure.Filters;
+using User.API.Infrastructure;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using User.API.Infrastructure.Services;
+using System;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using System.Linq;
 
 namespace User.API
 {
@@ -29,20 +33,81 @@ namespace User.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
             services.AddDbContext<UserContext>(options =>
             {
-                options.UseMySql(Configuration.GetConnectionString("MysqlUser"));
+                options.UseMySql(Configuration.GetSection("ConnectionString").Value);
             });
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "user_api";
-                    options.Authority = "http://localhost";
-                    options.SaveToken = true;
-                });
+
+            services.AddCustomIntegrations()
+                    .AddCustomAuthentication()
+                    .AddCustomCap()
+                    .AddConsulServiceDiscovery(Configuration);
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<UserContext>();
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<UserContextSeed>>();
+                new UserContextSeed().SeedAsync(context, logger).Wait();
+            }
+
+            app.UseConsulHealthChecks(Configuration);
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+
+    static class CustomExtensionsMethods
+    {
+        public static IServiceCollection AddCustomIntegrations(this IServiceCollection services)
+        {
+            services.AddOptions();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IIdentityService, IdentityService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services)
+        {
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.Audience = "user_api";
+                options.Authority = "http://localhost";
+                options.SaveToken = true;
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomCap(this IServiceCollection services)
+        {
             services.AddCap(x =>
             {
                 x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
@@ -58,38 +123,72 @@ namespace User.API
                     d.NodeName = "CAP No.1 Node";
                 });
             });
-            services.AddServiceDiscovery(Configuration.GetSection("ServiceDiscovery"));
-            services.AddControllers().AddNewtonsoftJson();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(GlobalExceptionFilter));
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            return services;
         }
 
-        public void Configure(IApplicationBuilder app,
-            IWebHostEnvironment env,
-            IHostApplicationLifetime appLife,
-            IOptions<ServiceDiscoveryOptions> serviceOptions,
-            IConsulClient consul)
+        public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
         {
-            if (env.IsDevelopment())
+            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
             {
-                app.UseDeveloperExceptionPage();
+                if (!string.IsNullOrEmpty(options.Consul.HttpEndpoint))
+                {
+                    cfg.Address = new Uri(options.Consul.HttpEndpoint);
+                }
+            }));
+            services.AddSingleton<IServiceDiscovery, ConsulServiceDiscovery>();
+
+            return services;
+        }
+
+        public static IApplicationBuilder UseConsulHealthChecks(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            var appLife = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IHostApplicationLifetime));
+
+            var consul = app.ApplicationServices.GetRequiredService<IConsulClient>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IConsulClient));
+
+            if (string.IsNullOrEmpty(options.ServiceName))
+                throw new ArgumentException("service name must be configure", nameof(options.ServiceName));
+
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature>()
+                .Addresses
+                .Select(p => new Uri(p));
+
+            foreach (var address in addresses)
+            {
+                var serviceId = $"{options.ServiceName}_{address.Host}:{address.Port}";
+
+                var httpCheck = new AgentServiceCheck()
+                {
+                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
+                    Interval = TimeSpan.FromSeconds(30),
+                    HTTP = new Uri(address, "HealthCheck").OriginalString
+                };
+
+                var registration = new AgentServiceRegistration()
+                {
+                    Checks = new[] { httpCheck },
+                    Address = address.Host,
+                    ID = serviceId,
+                    Name = options.ServiceName,
+                    Port = address.Port,
+                    Tags = new[] { "api" }
+                };
+
+                consul.Agent.ServiceRegister(registration).GetAwaiter().GetResult();
+
+                appLife.ApplicationStopping.Register(() =>
+                {
+                    consul.Agent.ServiceDeregister(serviceId).GetAwaiter().GetResult();
+                });
             }
 
-            app.UseServiceDiscovery(appLife, serviceOptions, consul);
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            //初始化数据
-            app.UserInitDatabase();
+            return app;
         }
     }
 }

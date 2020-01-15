@@ -9,17 +9,18 @@ using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Collections.Generic;
 using System.Linq;
+using User.API.Infrastructure;
 
 namespace User.API.UnitTest
 {
     public class UsersControllerTest
     {
-        private Data.UserContext GetUserContext()
+        private UserContext GetUserContext()
         {
-            var options = new DbContextOptionsBuilder<Data.UserContext>()
+            var options = new DbContextOptionsBuilder<UserContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
-            var userContext = new Data.UserContext(options);
+            var userContext = new UserContext(options);
 
             userContext.Users.Add(new Models.AppUser
             {
@@ -31,12 +32,12 @@ namespace User.API.UnitTest
             return userContext;
         }
 
-        private (Controllers.UsersController, Data.UserContext) GetUsersController()
+        private (Controllers.UsersController, UserContext) GetUsersController()
         {
             var context = GetUserContext();
             //var loggerMoq = new Mock<ILogger<Controllers.UsersController>>();
             //var logger = loggerMoq.Object;
-            var controller = new Controllers.UsersController(context,null);
+            var controller = new Controllers.UsersController(context,null,null);
             return (controller, context);
         }
 
