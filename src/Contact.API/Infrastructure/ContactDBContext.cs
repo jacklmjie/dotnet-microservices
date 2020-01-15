@@ -3,9 +3,8 @@ using Contact.API.Models;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Collections.Generic;
-using Contact.API.Infrastructure;
 
-namespace Contact.API.Data
+namespace Contact.API.Infrastructure
 {
     public class ContactDBContext
     {

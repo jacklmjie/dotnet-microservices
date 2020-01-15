@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Contact.API.Models;
 
-namespace Contact.API.Data
+namespace Contact.API.Infrastructure.Repositories
 {
     public interface IContactApplyRequestRepository
     {

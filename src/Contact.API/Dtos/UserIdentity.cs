@@ -1,6 +1,6 @@
 ﻿namespace Contact.API.Dtos
 {
-    public class UserIdentity
+    public class UserIdentityDTO
     {
         public int UserId { get; set; }
         public string Name { get; set; }

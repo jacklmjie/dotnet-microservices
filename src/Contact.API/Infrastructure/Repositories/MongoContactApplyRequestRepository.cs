@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Contact.API.Models;
 using MongoDB.Driver;
 
-namespace Contact.API.Data
+namespace Contact.API.Infrastructure.Repositories
 {
     public class MongoContactApplyRequestRepository : IContactApplyRequestRepository
     {

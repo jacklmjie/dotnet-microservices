@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Linq;
 using User.API.Infrastructure.Exceptions;
 
-namespace User.API.Infrastructure.Services
+namespace Contact.API.Infrastructure.Services
 {
     public class IdentityService : IIdentityService
     {
@@ -17,7 +16,7 @@ namespace User.API.Infrastructure.Services
         public int GetUserIdentity()
         {
             if (!int.TryParse(_context.HttpContext.User.FindFirst("sub").Value, out int userId))
-                throw new UserDomainException("token错误");
+                throw new ContactDomainException("token错误");
             return userId;
         }
 

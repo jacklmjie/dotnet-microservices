@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Contact.API.Models;
-using Contact.API.Data;
-using Contact.API.Service;
 using System.Threading;
 using Contact.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Contact.API.Infrastructure.Repositories;
+using Contact.API.Infrastructure.Services;
 
 namespace Contact.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactsController : BaseController
+    public class ContactsController : ControllerBase
     {
         private readonly IContactApplyRequestRepository _contactApplyRequestRepository;
         private readonly IContactRepository _contactRepository;
         private readonly IUserService _userService;
+        private readonly IIdentityService _identityService;
         public ContactsController(IContactApplyRequestRepository contactApplyRequestRep,
             IContactRepository contactRepository,
-            IUserService userService)
+            IUserService userService,
+            IIdentityService identityService)
         {
             _contactApplyRequestRepository = contactApplyRequestRep;
             _contactRepository = contactRepository;
             _userService = userService;
+            _identityService = identityService;
         }
 
         /// <summary>
@@ -40,7 +40,8 @@ namespace Contact.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
         {
-            var contacts = await _contactRepository.GetContactsAsync(UserIdentity.UserId);
+            var userIdentity = _identityService.GetUserIdentity();
+            var contacts = await _contactRepository.GetContactsAsync(userIdentity);
             return Ok(contacts);
         }
 
@@ -55,7 +56,8 @@ namespace Contact.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> TagContacts(TagContactInputViewModel viewModel, CancellationToken cancellationToken)
         {
-            var result = await _contactRepository.TagContactsAsync(UserIdentity.UserId, viewModel.ContactId, viewModel.Tags, cancellationToken);
+            var userIdentity = _identityService.GetUserIdentity();
+            var result = await _contactRepository.TagContactsAsync(userIdentity, viewModel.ContactId, viewModel.Tags, cancellationToken);
 
             if (result)
             {
@@ -76,7 +78,8 @@ namespace Contact.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> GetApplyRequests(CancellationToken cancellationToken)
         {
-            var requests = await _contactApplyRequestRepository.GetRequestListAsync(UserIdentity.UserId, cancellationToken);
+            var userIdentity = _identityService.GetUserIdentity();
+            var requests = await _contactApplyRequestRepository.GetRequestListAsync(userIdentity, cancellationToken);
             return Ok(requests);
         }
 
@@ -97,11 +100,12 @@ namespace Contact.API.Controllers
                 throw new Exception("用户参数错误");
             }
 
+            var userIdentity = _identityService.GetUserIdentity();
             var result = await _contactApplyRequestRepository.AddRequestAsync(new ContactApplyRequest
             {
                 UserId = userId,
                 Name = user.Name,
-                ApplierId = UserIdentity.UserId,
+                ApplierId = userIdentity,
                 ApplyTime = DateTime.Now
             }, cancellationToken);
 
@@ -124,16 +128,17 @@ namespace Contact.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> ApprovalApplyRequest(int userId, CancellationToken cancellationToken)
         {
-            var result = await _contactApplyRequestRepository.ApprovalAsync(userId, UserIdentity.UserId, cancellationToken);
+            var userIdentity = _identityService.GetUserIdentity();
+            var result = await _contactApplyRequestRepository.ApprovalAsync(userId, userIdentity, cancellationToken);
             if (!result)
             {
                 //log
                 return BadRequest();
             }
             var applier = await _userService.GetUserAsync(userId);
-            var user = await _userService.GetUserAsync(UserIdentity.UserId);
+            var user = await _userService.GetUserAsync(userIdentity);
 
-            await _contactRepository.AddContactInfoAsync(UserIdentity.UserId, applier, cancellationToken);
+            await _contactRepository.AddContactInfoAsync(userIdentity, applier, cancellationToken);
             await _contactRepository.AddContactInfoAsync(userId, user, cancellationToken);
 
             return Ok();

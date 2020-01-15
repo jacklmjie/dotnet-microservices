@@ -19,5 +19,9 @@
     <Folder Include="Proto\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DnsClient" Version="1.2.0" />
+  </ItemGroup>
+
 
 </Project>

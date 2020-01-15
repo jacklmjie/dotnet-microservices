@@ -1,8 +1,8 @@
-﻿namespace Project.API.Infrastructure.Services
+﻿namespace Contact.API.Infrastructure.Services
 {
     public interface IIdentityService
     {
-        string GetUserIdentity();
+        int GetUserIdentity();
 
         string GetUserName();
     }
