@@ -32,12 +32,7 @@ namespace User.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<UserContext>(options =>
-            {
-                options.UseMySql(Configuration.GetSection("ConnectionString").Value);
-            });
-
-            services.AddCustomIntegrations()
+            services.AddCustomIntegrations(Configuration)
                     .AddCustomAuthentication()
                     .AddCustomCap()
                     .AddConsulServiceDiscovery(Configuration);
@@ -77,10 +72,14 @@ namespace User.API
 
     static class CustomExtensionsMethods
     {
-        public static IServiceCollection AddCustomIntegrations(this IServiceCollection services)
+        public static IServiceCollection AddCustomIntegrations(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddOptions();
-
+            services.AddDbContext<UserContext>(options =>
+            {
+                options.UseMySql(configuration.GetSection("ConnectionString").Value);
+            });
             return services;
         }
 
@@ -89,7 +88,6 @@ namespace User.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
 
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
             services.AddAuthentication(options =>
             {
