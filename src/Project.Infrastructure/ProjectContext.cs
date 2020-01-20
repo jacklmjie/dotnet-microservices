@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Project.Domain.AggregatesModel.ProjectAggregate;
 using Project.Domain.Seedwork;
+using Project.Infrastructure.EntityConfigurations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +12,12 @@ namespace Project.Infrastructure
 {
     public class ProjectContext : DbContext, IUnitOfWork
     {
+        public DbSet<Domain.AggregatesModel.ProjectAggregate.Project> Projects { get; set; }
+        public DbSet<ProjectContributor> Contributors { get; set; }
+        public DbSet<ProjectProperty> Properties { get; set; }
+        public DbSet<ProjectViewer> Viewers { get; set; }
+        public DbSet<ProjectVisibleRule> VisibleRules { get; set; }
+
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
@@ -27,13 +35,11 @@ namespace Project.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new PaymentMethodEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new CardTypeEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderStatusEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectContributorEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectPropertyEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectViewerEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectVisibleRuleEntityTypeConfiguration());
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

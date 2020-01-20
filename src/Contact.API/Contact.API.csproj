@@ -6,12 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="DnsClient" Version="1.2.0" />
-    <PackageReference Include="DotNetCore.CAP" Version="3.0.0" />
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.0" />
-    <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.0" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
+    <PackageReference Include="DotNetCore.CAP" Version="3.0.1" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.1" />
+    <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.1" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
   </ItemGroup>
 
 
