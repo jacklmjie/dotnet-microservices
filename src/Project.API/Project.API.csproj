@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +15,6 @@
   <ItemGroup>
     <Folder Include="Application\DomainEventHandlers\" />
     <Folder Include="Application\Models\" />
-    <Folder Include="Application\Queries\" />
     <Folder Include="Application\Validations\" />
     <Folder Include="Extensions\" />
     <Folder Include="Grpc\" />
@@ -20,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Consul" Version="0.7.2.6" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="DnsClient" Version="1.2.0" />
     <PackageReference Include="MediatR" Version="8.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />

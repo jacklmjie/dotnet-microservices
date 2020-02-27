@@ -25,7 +25,7 @@ namespace User.Identity.Services
 
         public async Task<UserIdentityDTO> CheckOrCreateAsync(string phone)
         {
-            var url = _serviceDiscovery.FindServiceInstances(_serviceDiscoveryOptions.ServiceName);
+            var url = _serviceDiscovery.FindServiceInstances(_serviceDiscoveryOptions.UserServiceName);
             var json = JsonConvert.SerializeObject(new { phone });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Project.Domain.AggregatesModel.ProjectAggregate;
 using Project.Domain.Seedwork;
 using ProjectEntity = Project.Domain.AggregatesModel.ProjectAggregate.Project;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Project.Infrastructure.Repositories
 {

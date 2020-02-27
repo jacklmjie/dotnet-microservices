@@ -28,7 +28,7 @@ namespace Contact.API.Infrastructure.Services
         /// <returns></returns>
         public async Task<UserIdentityDTO> GetUserAsync(int UserId)
         {
-            var url = _serviceDiscovery.FindServiceInstances(_serviceDiscoveryOptions.ServiceName);
+            var url = _serviceDiscovery.FindServiceInstances(_serviceDiscoveryOptions.UserServiceName);
             var response = await _httpClient.GetAsync(url + $"/api/users/identity/{UserId}");
             if (response.StatusCode == HttpStatusCode.OK)
             {

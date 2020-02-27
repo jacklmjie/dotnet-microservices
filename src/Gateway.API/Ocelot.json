@@ -115,6 +115,22 @@
         "AuthenticationProviderKey": "testkey",
         "AllowedScopes": [ "contact_api" ]
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/projects",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/projects",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "testkey",
+        "AllowedScopes": [ "project_api" ]
+      }
     }
   ],
   "GlobalConfiguration": {

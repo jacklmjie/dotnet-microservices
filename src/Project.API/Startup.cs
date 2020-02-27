@@ -1,22 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Project.API.Application.Services;
 using MediatR;
 using System.Reflection;
 using Project.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Project.API.Application.Queries;
+using Consul;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http.Features;
+using Project.Domain.AggregatesModel.ProjectAggregate;
+using Project.Infrastructure.Repositories;
 
 namespace Project.API
 {
@@ -32,7 +34,8 @@ namespace Project.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCustomIntegrations(Configuration)
-                .AddCustomAuthentication();
+                .AddCustomAuthentication()
+                .AddConsulServiceDiscovery(Configuration);
 
             services.AddControllers();
         }
@@ -43,6 +46,8 @@ namespace Project.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseConsulHealthChecks(Configuration);
 
             app.UseRouting();
 
@@ -68,6 +73,17 @@ namespace Project.API
                     sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                 });
             });
+
+            services.AddScoped<IRecommendService, TestRecommendService>()
+                .AddScoped<IProjectQueries, ProjectQueries>(sp =>
+                {
+                    return new ProjectQueries(configuration.GetSection("ConnectionString").Value);
+                }).AddScoped<IProjectRepository, ProjectRepository>(sp =>
+                {
+                    var projectContext = sp.GetRequiredService<ProjectContext>();
+                    return new ProjectRepository(projectContext);
+                });
+
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
 
             return services;
@@ -92,6 +108,69 @@ namespace Project.API
             });
 
             return services;
+        }
+
+        public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
+        {
+            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
+            {
+                if (!string.IsNullOrEmpty(options.Consul.HttpEndpoint))
+                {
+                    cfg.Address = new Uri(options.Consul.HttpEndpoint);
+                }
+            }));
+
+            return services;
+        }
+
+        public static IApplicationBuilder UseConsulHealthChecks(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            var appLife = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IHostApplicationLifetime));
+
+            var consul = app.ApplicationServices.GetRequiredService<IConsulClient>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IConsulClient));
+
+            if (string.IsNullOrEmpty(options.ServiceName))
+                throw new ArgumentException("service name must be configure", nameof(options.ServiceName));
+
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature>()
+                .Addresses
+                .Select(p => new Uri(p));
+
+            foreach (var address in addresses)
+            {
+                var serviceId = $"{options.ServiceName}_{address.Host}:{address.Port}";
+
+                var httpCheck = new AgentServiceCheck()
+                {
+                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
+                    Interval = TimeSpan.FromSeconds(30),
+                    HTTP = new Uri(address, "HealthCheck").OriginalString
+                };
+
+                var registration = new AgentServiceRegistration()
+                {
+                    Checks = new[] { httpCheck },
+                    Address = address.Host,
+                    ID = serviceId,
+                    Name = options.ServiceName,
+                    Port = address.Port,
+                    Tags = new[] { "api" }
+                };
+
+                consul.Agent.ServiceRegister(registration).GetAwaiter().GetResult();
+
+                appLife.ApplicationStopping.Register(() =>
+                {
+                    consul.Agent.ServiceDeregister(serviceId).GetAwaiter().GetResult();
+                });
+            }
+
+            return app;
         }
     }
 }
