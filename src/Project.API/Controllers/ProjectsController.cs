@@ -6,6 +6,7 @@ using Project.API.Application.Services;
 using Project.API.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace Project.API.Controllers
 {
@@ -74,8 +75,13 @@ namespace Project.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> CreateProject([FromBody] Domain.AggregatesModel.ProjectAggregate.Project project)
         {
+            if (project == null)
+                throw new ArgumentNullException(nameof(project));
+
+            project.UserId = _identityService.GetUserIdentity();
             var command = new CreateProjectCommand() { Project = project };
             var result = await _mediator.Send(command);
             return Ok(result);

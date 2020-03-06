@@ -74,7 +74,7 @@ namespace Project.Domain.AggregatesModel.ProjectAggregate
             {
                 Viewers.Add(viewer);
 
-                AddDomainEvent(new ProjectViewedDomainEvent(viewer));
+                AddDomainEvent(new ProjectViewedDomainEvent(this.Name, viewer));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Project.Domain.AggregatesModel.ProjectAggregate
             {
                 Contributors.Add(contributor);
 
-                AddDomainEvent(new ProjectJoinedDomainEvent(contributor));
+                AddDomainEvent(new ProjectJoinedDomainEvent(this.Name, contributor));
             }
         }
     }

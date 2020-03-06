@@ -1,5 +1,8 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
+using Consul;
 using Contact.API.Infrastructure;
 using Contact.API.Infrastructure.Event;
 using Contact.API.Infrastructure.Repositories;
@@ -9,7 +12,9 @@ using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,6 +46,8 @@ namespace Contact.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseConsulHealthChecks(Configuration);
 
             app.UseRouting();
 
@@ -121,6 +128,55 @@ namespace Contact.API
             services.AddSingleton<IServiceDiscovery, ServiceDiscovery>();
 
             return services;
+        }
+
+        public static IApplicationBuilder UseConsulHealthChecks(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            var appLife = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IHostApplicationLifetime));
+
+            var consul = app.ApplicationServices.GetRequiredService<IConsulClient>() ??
+               throw new ArgumentException("Missing Dependency", nameof(IConsulClient));
+
+            if (string.IsNullOrEmpty(options.ServiceName))
+                throw new ArgumentException("service name must be configure", nameof(options.ServiceName));
+
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature>()
+                .Addresses
+                .Select(p => new Uri(p));
+
+            foreach (var address in addresses)
+            {
+                var serviceId = $"{options.ServiceName}_{address.Host}:{address.Port}";
+
+                var httpCheck = new AgentServiceCheck()
+                {
+                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
+                    Interval = TimeSpan.FromSeconds(30),
+                    HTTP = new Uri(address, "HealthCheck").OriginalString
+                };
+
+                var registration = new AgentServiceRegistration()
+                {
+                    Checks = new[] { httpCheck },
+                    Address = address.Host,
+                    ID = serviceId,
+                    Name = options.ServiceName,
+                    Port = address.Port,
+                    Tags = new[] { "api" }
+                };
+
+                consul.Agent.ServiceRegister(registration).GetAwaiter().GetResult();
+
+                appLife.ApplicationStopping.Register(() =>
+                {
+                    consul.Agent.ServiceDeregister(serviceId).GetAwaiter().GetResult();
+                });
+            }
+
+            return app;
         }
     }
 }

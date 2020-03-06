@@ -5,10 +5,13 @@ namespace Project.Domain.Events
 {
     public class ProjectViewedDomainEvent : INotification
     {
+        public string Name { get; set; }
+
         public ProjectViewer Viewer { get; set; }
 
-        public ProjectViewedDomainEvent(ProjectViewer viewer)
+        public ProjectViewedDomainEvent(string name, ProjectViewer viewer)
         {
+            Name = name;
             Viewer = viewer;
         }
     }

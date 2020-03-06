@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
 using Project.Domain.AggregatesModel.ProjectAggregate;
 using Project.Infrastructure.Repositories;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 
 namespace Project.API
 {
@@ -35,6 +36,7 @@ namespace Project.API
         {
             services.AddCustomIntegrations(Configuration)
                 .AddCustomAuthentication()
+                .AddCustomCap()
                 .AddConsulServiceDiscovery(Configuration);
 
             services.AddControllers();
@@ -120,6 +122,27 @@ namespace Project.API
                     cfg.Address = new Uri(options.Consul.HttpEndpoint);
                 }
             }));
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomCap(this IServiceCollection services)
+        {
+            services.AddCap(x =>
+            {
+                x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
+                x.UseRabbitMQ("localhost");
+                x.UseDashboard();
+                x.UseDiscovery(d =>
+                {
+                    d.DiscoveryServerHostName = "localhost";
+                    d.DiscoveryServerPort = 8500;
+                    d.CurrentNodeHostName = "localhost";
+                    d.CurrentNodePort = 5003;
+                    d.NodeId = "3";
+                    d.NodeName = "CAP No.3 Node";
+                });
+            });
 
             return services;
         }

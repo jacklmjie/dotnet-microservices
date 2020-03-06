@@ -30,6 +30,14 @@ namespace Contact.API.Controllers
             _identityService = identityService;
         }
 
+        [HttpGet]
+        [Route("{userId}")]
+        public async Task<ActionResult> Get(int userId)
+        {
+            var contacts = await _contactRepository.GetContactsAsync(userId);
+            return Ok(contacts);
+        }
+
         /// <summary>
         /// 获取好友列表
         /// </summary>
@@ -100,7 +108,6 @@ namespace Contact.API.Controllers
                 throw new Exception("用户参数错误");
             }
 
-            var userId = _identityService.GetUserIdentity();
             var result = await _contactApplyRequestRepository.AddRequestAsync(new ContactApplyRequest
             {
                 UserId = userId,
@@ -128,7 +135,6 @@ namespace Contact.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> ApprovalApplyRequest(int userId, CancellationToken cancellationToken)
         {
-            var userId = _identityService.GetUserIdentity();
             var result = await _contactApplyRequestRepository.ApprovalAsync(userId, userId, cancellationToken);
             if (!result)
             {

@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\DomainEventHandlers\" />
     <Folder Include="Application\Models\" />
     <Folder Include="Application\Validations\" />
     <Folder Include="Extensions\" />
@@ -25,6 +24,10 @@
     <PackageReference Include="Consul" Version="0.7.2.6" />
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="DnsClient" Version="1.2.0" />
+    <PackageReference Include="DotNetCore.CAP" Version="3.0.2" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.2" />
+    <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.2" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.2" />
     <PackageReference Include="MediatR" Version="8.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
