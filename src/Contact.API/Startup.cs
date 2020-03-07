@@ -128,7 +128,7 @@ namespace Contact.API
                 }
             }));
 
-            //services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
+            services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
             services.AddSingleton<IDnsQuery>(p =>
             {
                 return new LookupClient(options.Consul.DnsEndpoint.ToIPEndPoint());

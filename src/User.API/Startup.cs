@@ -128,6 +128,8 @@ namespace User.API
         public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
         {
             var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+
+            services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
             services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
             {
                 if (!string.IsNullOrEmpty(options.Consul.HttpEndpoint))
