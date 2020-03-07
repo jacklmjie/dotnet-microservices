@@ -7,14 +7,15 @@ using Recommend.API.IntegrationEvents;
 using Recommend.API.Infrastructure;
 using Recommend.API.Models;
 using Recommend.API.Infrastructure.Services;
+using Recommend.API.IntegrationEvents.Events;
 
-namespace Recommend.API.IntegrationEventsHandlers
+namespace Recommend.API.IntegrationEventsHandlers.EventsHandlers
 {
     public class ProjectCreatedIntegrationEventHandler : ICapSubscribe
     {
-        private RecommendDbContext _dbContext;
-        private IUserService _userService;
-        private IContactService _contactService;
+        private readonly RecommendDbContext _dbContext;
+        private readonly IUserService _userService;
+        private readonly IContactService _contactService;
         public ProjectCreatedIntegrationEventHandler(RecommendDbContext dbContext,
             IUserService userService,
             IContactService contactService)
@@ -24,6 +25,7 @@ namespace Recommend.API.IntegrationEventsHandlers
             _contactService = contactService;
         }
 
+        [CapSubscribe("project.api.project_created_event")]
         public async Task CreatedRecommendFromProject(ProjectCreatedIntegrationEvent @event)
         {
             var fromUser = await _userService.GetUserAsync(@event.UserId);

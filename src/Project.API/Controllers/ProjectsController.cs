@@ -7,6 +7,7 @@ using Project.API.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
+using Project.API.Infrastructure.Services;
 
 namespace Project.API.Controllers
 {

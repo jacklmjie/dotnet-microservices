@@ -131,6 +131,22 @@
         "AuthenticationProviderKey": "testkey",
         "AllowedScopes": [ "project_api" ]
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/recommends",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/recommends",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "testkey",
+        "AllowedScopes": [ "recommend_api" ]
+      }
     }
   ],
   "GlobalConfiguration": {

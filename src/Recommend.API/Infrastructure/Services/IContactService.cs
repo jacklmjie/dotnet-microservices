@@ -17,3 +17,4 @@ namespace Recommend.API.Infrastructure.Services
         /// <returns></returns>
         Task<List<ContactDTO>> GetContactsByUserIdAsync(int userId);
     }
+}

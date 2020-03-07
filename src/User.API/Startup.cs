@@ -108,7 +108,7 @@ namespace User.API
         {
             services.AddCap(x =>
             {
-                x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
+                x.UseMySql("server=127.0.0.1;port=3306;database=user_contact_cap;uid=root;pwd=password;");
                 x.UseRabbitMQ("localhost");
                 x.UseDashboard();
                 x.UseDiscovery(d =>
@@ -118,7 +118,7 @@ namespace User.API
                     d.CurrentNodeHostName = "localhost";
                     d.CurrentNodePort = 5000;
                     d.NodeId = "1";
-                    d.NodeName = "CAP No.1 Node";
+                    d.NodeName = "CAP UserAPI Node";
                 });
             });
 

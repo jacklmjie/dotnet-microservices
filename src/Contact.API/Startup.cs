@@ -100,7 +100,7 @@ namespace Contact.API
             services.AddTransient<ISubscriberService, SubscriberService>();
             services.AddCap(x =>
             {
-                x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
+                x.UseMySql("server=127.0.0.1;port=3306;database=user_contact_cap;uid=root;pwd=password;");
                 x.UseRabbitMQ("localhost");
                 x.UseDashboard();
                 x.UseDiscovery(d =>
@@ -110,7 +110,7 @@ namespace Contact.API
                     d.CurrentNodeHostName = "localhost";
                     d.CurrentNodePort = 5002;
                     d.NodeId = "2";
-                    d.NodeName = "CAP No.2 Node";
+                    d.NodeName = "CAP ContactAPI Node";
                 });
             });
 
@@ -119,8 +119,16 @@ namespace Contact.API
 
         public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
             var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
+            services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
+            {
+                if (!string.IsNullOrEmpty(options.Consul.HttpEndpoint))
+                {
+                    cfg.Address = new Uri(options.Consul.HttpEndpoint);
+                }
+            }));
+
+            //services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
             services.AddSingleton<IDnsQuery>(p =>
             {
                 return new LookupClient(options.Consul.DnsEndpoint.ToIPEndPoint());

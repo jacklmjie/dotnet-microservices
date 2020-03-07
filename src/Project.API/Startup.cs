@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Project.Domain.AggregatesModel.ProjectAggregate;
 using Project.Infrastructure.Repositories;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
+using Project.API.Infrastructure.Services;
+using DnsClient;
 
 namespace Project.API
 {
@@ -123,6 +125,13 @@ namespace Project.API
                 }
             }));
 
+            //services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
+            services.AddSingleton<IDnsQuery>(p =>
+            {
+                return new LookupClient(options.Consul.DnsEndpoint.ToIPEndPoint());
+            });
+            services.AddSingleton<IServiceDiscovery, ServiceDiscovery>();
+
             return services;
         }
 
@@ -130,7 +139,7 @@ namespace Project.API
         {
             services.AddCap(x =>
             {
-                x.UseMySql("server=127.0.0.1;port=3306;database=user_cap;uid=root;pwd=password;");
+                x.UseMySql("server=127.0.0.1;port=3306;database=project_coantact_cap;uid=root;pwd=password;");
                 x.UseRabbitMQ("localhost");
                 x.UseDashboard();
                 x.UseDiscovery(d =>
@@ -140,7 +149,7 @@ namespace Project.API
                     d.CurrentNodeHostName = "localhost";
                     d.CurrentNodePort = 5003;
                     d.NodeId = "3";
-                    d.NodeName = "CAP No.3 Node";
+                    d.NodeName = "CAP ProjectAPI Node";
                 });
             });
 
