@@ -34,7 +34,7 @@ namespace User.API
         {
             services.AddCustomIntegrations(Configuration)
                     .AddCustomAuthentication()
-                    .AddCustomCap()
+                    .AddCustomCap(Configuration)
                     .AddConsulServiceDiscovery(Configuration);
             services.AddControllers().AddNewtonsoftJson();
             services.AddMvc(options =>
@@ -62,7 +62,7 @@ namespace User.API
             app.UseRouting();
 
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -78,7 +78,7 @@ namespace User.API
             services.AddOptions();
             services.AddDbContext<UserContext>(options =>
             {
-                options.UseMySql(configuration.GetSection("ConnectionString").Value);
+                options.UseMySql(configuration.GetConnectionString("MySqlUser"));
             });
             return services;
         }
@@ -104,11 +104,12 @@ namespace User.API
             return services;
         }
 
-        public static IServiceCollection AddCustomCap(this IServiceCollection services)
+        public static IServiceCollection AddCustomCap(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddCap(x =>
             {
-                x.UseMySql("server=127.0.0.1;port=3306;database=user_contact_cap;uid=root;pwd=password;");
+                x.UseMySql(configuration.GetConnectionString("CapDashboard"));
                 x.UseRabbitMQ("localhost");
                 x.UseDashboard();
                 x.UseDiscovery(d =>
@@ -128,7 +129,6 @@ namespace User.API
         public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
         {
             var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-
             services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
             services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
             {
