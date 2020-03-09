@@ -5,10 +5,10 @@ ENV ASPNETCORE_URLS http://+:5000
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["User.API.csproj", "src/"]
-RUN dotnet restore "src/User.API.csproj"
+COPY ["User.API.csproj", ""]
+RUN dotnet restore "./User.API.csproj"
 COPY . .
-WORKDIR "/src"
+WORKDIR "/src/."
 RUN dotnet build "User.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
