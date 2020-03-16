@@ -130,3 +130,4 @@ src/.vs/config/applicationhost.config
 !SQLite.Interop.dll
 /tools
 nupkg/push-hikalkan.bat
+/tests/consul.exe
