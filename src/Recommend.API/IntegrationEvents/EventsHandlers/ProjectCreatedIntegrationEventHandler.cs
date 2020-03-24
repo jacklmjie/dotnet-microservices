@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using DotNetCore.CAP;
 using Recommend.API.IntegrationEvents;
-using Recommend.API.Infrastructure;
+using Recommend.API.Application;
 using Recommend.API.Models;
-using Recommend.API.Infrastructure.Services;
+using Recommend.API.Services;
 using Recommend.API.IntegrationEvents.Events;
 
 namespace Recommend.API.IntegrationEventsHandlers.EventsHandlers

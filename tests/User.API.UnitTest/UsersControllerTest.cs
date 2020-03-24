@@ -9,7 +9,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Collections.Generic;
 using System.Linq;
-using User.API.Infrastructure;
+using User.API.Application;
 
 namespace User.API.UnitTest
 {

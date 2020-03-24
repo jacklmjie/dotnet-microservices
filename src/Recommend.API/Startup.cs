@@ -16,8 +16,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Recommend.API.Infrastructure;
-using Recommend.API.Infrastructure.Services;
+using Recommend.API.Application;
+using Recommend.API.Services;
 using Recommend.API.IntegrationEventsHandlers.EventsHandlers;
 
 namespace Recommend.API

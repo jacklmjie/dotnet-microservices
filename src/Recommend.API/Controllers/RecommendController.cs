@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Recommend.API.Infrastructure;
+using Recommend.API.Application;
 using Microsoft.AspNetCore.Authorization;
-using Recommend.API.Infrastructure.Services;
+using Recommend.API.Services;
 using System.Linq;
 using System;
 using Microsoft.EntityFrameworkCore;

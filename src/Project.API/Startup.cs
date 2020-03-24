@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Project.Domain.AggregatesModel.ProjectAggregate;
 using Project.Infrastructure.Repositories;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
-using Project.API.Infrastructure.Services;
+using Project.API.Services;
 using DnsClient;
 
 namespace Project.API

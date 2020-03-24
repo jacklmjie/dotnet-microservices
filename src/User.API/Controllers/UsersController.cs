@@ -10,9 +10,9 @@ using User.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using DotNetCore.CAP;
-using User.API.Infrastructure.Exceptions;
-using User.API.Infrastructure;
-using User.API.Infrastructure.Services;
+using User.API.Application.Exceptions;
+using User.API.Application;
+using User.API.Services;
 
 namespace User.API.Controllers
 {

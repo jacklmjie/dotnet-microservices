@@ -6,8 +6,8 @@ using System.Threading;
 using Contact.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Contact.API.Infrastructure.Repositories;
-using Contact.API.Infrastructure.Services;
+using Contact.API.Application.Repositories;
+using Contact.API.Services;
 
 namespace Contact.API.Controllers
 {
