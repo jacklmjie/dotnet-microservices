@@ -37,6 +37,10 @@ namespace User.API
                     .AddCustomCap(Configuration)
                     .AddConsulServiceDiscovery(Configuration);
             services.AddControllers().AddNewtonsoftJson();
+
+            //添加健康检查
+            services.AddHealthChecks();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
@@ -66,6 +70,8 @@ namespace User.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //健康检查地址
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
@@ -166,7 +172,7 @@ namespace User.API
                 {
                     DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
                     Interval = TimeSpan.FromSeconds(30),
-                    HTTP = new Uri(address, "HealthCheck").OriginalString
+                    HTTP = new Uri(address, "health").OriginalString
                 };
 
                 var registration = new AgentServiceRegistration()
