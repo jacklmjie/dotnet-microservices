@@ -41,6 +41,8 @@ namespace User.API
             //添加健康检查
             services.AddHealthChecks();
 
+            //异常过滤器
+            //MVC中间件之前的一些错误，其实是捕获不到的,仅仅关心控制器之间的异常
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
@@ -52,6 +54,15 @@ namespace User.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                //默认异常中间件ExceptionHandlerMiddleware,有参数ExceptionHandlingPath/ExceptionHandler
+                //和放置位置有关，第一个所有错误都能捕捉到
+                app.UseExceptionHandler("/Error");
+
+                //自定义异常中间件
+                //app.UseMiddleware<MyExceptionMiddleware>();
             }
 
             using (var scope = app.ApplicationServices.CreateScope())

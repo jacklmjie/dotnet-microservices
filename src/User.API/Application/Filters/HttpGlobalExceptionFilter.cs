@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using User.API.Application.ActionResults;
 using User.API.Application.Exceptions;
 
@@ -11,7 +12,7 @@ namespace User.API.Application.Filters
     /// <summary>
     /// 全局异常过滤器
     /// </summary>
-    public class HttpGlobalExceptionFilter : IExceptionFilter
+    public class HttpGlobalExceptionFilter : IAsyncExceptionFilter
     {
         private readonly IWebHostEnvironment _env;
         private readonly ILogger<HttpGlobalExceptionFilter> _logger;
@@ -22,7 +23,7 @@ namespace User.API.Application.Filters
             _logger = logger;
         }
 
-        public void OnException(ExceptionContext context)
+        public Task OnExceptionAsync(ExceptionContext context)
         {
             var json = new JsonErrorResponse();
             if (context.Exception.GetType() == typeof(UserDomainException))
@@ -42,7 +43,9 @@ namespace User.API.Application.Filters
             }
 
             _logger.LogError(context.Exception, context.Exception.Message);
-            context.ExceptionHandled = true;
+            context.ExceptionHandled = true;//异常已处理
+
+            return Task.CompletedTask;
         }
 
         private class JsonErrorResponse
