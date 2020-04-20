@@ -38,8 +38,8 @@ namespace User.API
                     .AddConsulServiceDiscovery(Configuration);
             services.AddControllers().AddNewtonsoftJson();
 
-            //添加健康检查
-            services.AddHealthChecks();
+            //TODO:可以使用扩展的健康检查
+            //services.AddHealthChecks();
 
             //异常过滤器
             //MVC中间件之前的一些错误，其实是捕获不到的,仅仅关心控制器之间的异常
@@ -82,7 +82,7 @@ namespace User.API
             {
                 endpoints.MapControllers();
                 //健康检查地址
-                endpoints.MapHealthChecks("/health");
+                //endpoints.MapHealthChecks("/health");
             });
         }
     }
