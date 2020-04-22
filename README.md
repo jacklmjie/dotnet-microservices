@@ -1,36 +1,29 @@
 ## 微服务系列
 ### 用户服务
--  docker
-  -  [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
-  -  docker安装mysql
-    -  外部volume挂载资料卷
--  ef生成数据库
-  -  [EF介绍](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
-  -  生成数据和数据初始化
--  dapper
-  -  [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
-  -  [demo](https://github.com/jacklmjie/aspnetcoreboilerplate/tree/master/demo/DemoDapper)
-  -  [dapper contain，仓储，事务，工作单元应用
+- docker
+  - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
+  - docker安装mysql
+    - 外部volume挂载资料卷
+- ef生成数据库
+  - [EF介绍](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
+  - 生成数据和数据初始化
+- dapper
+  - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
+  - [demo](https://github.com/jacklmjie/aspnetcoreboilerplate/tree/master/demo/DemoDapper)
+  - [dapper contain，仓储，事务，工作单元应用
 - webapi Restful
   - [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
   - PostMan工具的使用
 - 全局异常日志
-- [json patch](http://jsonpatch.com/)
+  - [json patch](http://jsonpatch.com/)
 - 单元测试
   - xunit+Moq+MemoryEFDbContext测试UserController，FluentAPI写UserController测试用例
-- 部署
-  - GitLab CI完整部署UserAPI到线上测试环境
-### 网关与认证
-- 授权服务
+### 授权服务
   - User.Identity
-  - 获取profile(再次从网关把token传了一次)
-  - oceloct自带传递方式
+  - 获取profile(再次从网关把token传了一次)，oceloct自带授权方式暂未实现
 - 网关
   -  [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
   -  Ocelot集成Identity Server鉴权
-  -  [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
-  -  [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
-  -  [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
   -  [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
   -  [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
 ### 通讯录服务
@@ -42,6 +35,12 @@
   - CQRS
     - [CQRS架构和传统架构的优缺点比较](http://www.techweb.com.cn/network/system/2017-07-07/2553563.shtml)
     - [MediatR](https://www.cnblogs.com/sheng-jie/p/10280336.html)
+### 部署
+- GitLab CI完整部署UserAPI到线上测试环境
+- 服务发现&注册&通信
+  - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
+  - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
+  - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
 
 ## DDD概念
 - ### 值对象
