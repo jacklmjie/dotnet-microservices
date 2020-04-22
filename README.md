@@ -11,9 +11,10 @@
   - [x] 数据初始化
 - [x] dapper操作数据
   - [x] [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
-  - [ ] dapper contain使用
-  - [ ] dapper仓储在webapi的使用
-  - [ ] dapper事务，工作单元应用
+  - [x] [demo](https://github.com/jacklmjie/aspnetcoreboilerplate/tree/master/demo/DemoDapper)
+  - [x] dapper contain使用
+  - [x] dapper仓储在webapi的使用
+  - [x] dapper事务，工作单元应用
 - [x] webapi Restful
   - [x] [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
   - [x] PostMan工具的使用
@@ -32,7 +33,7 @@
 - [ ] 网关
   - [x] [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
   - [x] Ocelot集成Identity Server鉴权
-  - [ ] [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
+  - [x] [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
   - [x] [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
   - [x] [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
   - [x] [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
