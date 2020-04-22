@@ -1,5 +1,5 @@
 ## 微服务系列
-### 用户服务
+- ### 用户服务
 - docker
   - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
   - docker安装mysql
@@ -18,30 +18,32 @@
   - [json patch](http://jsonpatch.com/)
 - 单元测试
   - xunit+Moq+MemoryEFDbContext测试UserController，FluentAPI写UserController测试用例
-### 授权服务
-  - User.Identity
-  - 获取profile(再次从网关把token传了一次)，oceloct自带授权方式暂未实现
-- 网关
-  -  [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
-  -  Ocelot集成Identity Server鉴权
-  -  [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
-  -  [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
-### 通讯录服务
+- ### 授权服务
+  - 统一验证&授权
+    - [IdentityServer建立授权与验证服务](https://www.cnblogs.com/edisonchou/p/identityserver4_foundation_and_quickstart_01.html)
+    - [Ocelot+IdentityServer统一验证与授权服务](https://www.cnblogs.com/edisonchou/p/identityserver4_foundation_and_quickstart_01.html)
+    - 获取profile(再次从网关把token传了一次)，oceloct自带授权方式暂未实现
+  - 熔断&降级
+    - [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
+    - [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
+  - API网关
+   - [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
+   - Ocelot集成Identity Server鉴权
+- ### 通讯录服务
  - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
  - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
  - [CAP集成RabbitMq](https://github.com/dotnetcore/CAP)
-### 项目推荐服务
+- ### 项目推荐服务
   - 三层,OOO和DDD区别
   - CQRS
     - [CQRS架构和传统架构的优缺点比较](http://www.techweb.com.cn/network/system/2017-07-07/2553563.shtml)
     - [MediatR](https://www.cnblogs.com/sheng-jie/p/10280336.html)
-### 部署
+- ### 部署
 - GitLab CI完整部署UserAPI到线上测试环境
 - 服务发现&注册&通信
   - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
   - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
   - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-
 ## DDD概念
 - ### 值对象
   - 很多对象没有概念上的表示，他们描述了一个事务的某种特征。 用于描述领域的某个方面而本身没有概念表示的对象称为Value Object（值对象）
