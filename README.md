@@ -44,6 +44,8 @@
 ### 项目推荐服务
   - 三层,OOO和DDD区别
   - CQRS
+    - [CQRS架构和传统架构的优缺点比较](http://www.techweb.com.cn/network/system/2017-07-07/2553563.shtml)
+    - [MediatR](https://www.cnblogs.com/sheng-jie/p/10280336.html)
 
 ## DDD概念
 - ### 值对象
