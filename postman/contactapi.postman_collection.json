@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "91b9a37d-fe88-4c10-a871-ce56a30970b0",
+		"name": "contactapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://{{localhost}}/contacts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{localhost}}/contacts",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://{{localhost}}/contacts/tag",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{localhost}}/contacts/tag",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"contacts",
+						"tag"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://{{localhost}}/contacts/apply-requests/1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{localhost}}/api/contacts/apply-requests/1",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"contacts",
+						"apply-requests",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "81a551f9-742a-498f-8c85-d3024b43c508",
+		"name": "userapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{localhost}}/api/users",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  { \"op\": \"replace\", \"path\": \"/Name\", \"value\": \"lmj\" },\n  { \"op\": \"replace\", \"path\": \"/Age\", \"value\": \"18\" },\n  { \"op\": \"replace\", \"path\": \"/Properties\", \n  \"value\":[\n  \t{\n  \t   \"key\":\"男\",\n  \t   \"value\":\"nan\",\n  \t   \"text\":\"\"\n  \t},\n    {\n  \t   \"key\":\"帅\",\n  \t   \"value\":\"shuai\",\n  \t   \"text\":\"\"\n  \t}]\n  }\n]"
+				},
+				"url": {
+					"raw": "http://{{localhost}}/api/users",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch1",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  { \"op\": \"replace\", \"path\": \"/Name\", \"value\": \"xuxiaolan\" },\n  { \"op\": \"replace\", \"path\": \"/Age\", \"value\": \"18\" }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{localhost}}/api/users",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check-or-create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"phone\": \"222\" }"
+				},
+				"url": {
+					"raw": "http://{{localhost}}/api/users/check-or-create",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"check-or-create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取用户标签选项数据",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{localhost}}/api/users/tags",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "更新用户标签数据",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\"朋友\",\"同事\"]"
+				},
+				"url": {
+					"raw": "http://{{localhost}}/api/users/tags",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

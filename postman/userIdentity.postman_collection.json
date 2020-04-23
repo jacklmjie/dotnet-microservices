@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "ddbb91ae-3383-45ce-ab9c-4cd8809447b2",
+		"name": "userIdentity",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SmsAuthCodeValidator",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "sms_auth_code",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "android",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "secret",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile gateway_api user_api",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "13967610266",
+							"type": "text"
+						},
+						{
+							"key": "auth_code",
+							"value": "111111",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5001/connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
