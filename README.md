@@ -46,12 +46,16 @@
     - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
     - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
   - Docker & CI/CD
+    - [基于Jenkins+Docker实现持续部署](https://www.cnblogs.com/edisonchou/p/CD_foundation_based_on_jenkins_and_docker.html)
+    - [基于Gitlab部署]视频里的部署方案
   - 统一配置中心
+    - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
   - 分布式追踪&日志
     - [Skywalking](https://github.com/SkyAPM/SkyAPM-dotnet)
     - [在 ASP.NET Core 中集成 Skywalking APM](https://www.cnblogs.com/savorboard/p/asp-net-core-skywalking.html)
     - [使用docker-compose 一键部署你的分布式调用链跟踪框架skywalking](https://www.cnblogs.com/huangxincheng/p/9666930.html)
   - 统一性能监控
+    - [基于App.Metrics+InfluxDB+Grafana实现统一性能监控](https://www.cnblogs.com/edisonchou/p/integrated_performance_monitoring_foundation.html)
 ## DDD概念
 - ### 值对象
   - 很多对象没有概念上的表示，他们描述了一个事务的某种特征。 用于描述领域的某个方面而本身没有概念表示的对象称为Value Object（值对象）
