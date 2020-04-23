@@ -1,50 +1,61 @@
 ## 微服务系列
-### 用户服务
-- [x] docker安装
-  - [x] [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
-  - [x] docker安装mysql
-    - [x] 直接运行
-    - [x] 外部volume挂载资料卷
-- [x] ef生成数据库
-  - [x] [EF介绍](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
-  - [x] 生成数据库
-  - [x] 数据初始化
-- [x] dapper操作数据
-  - [x] [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
-  - [ ] dapper contain使用
-  - [ ] dapper仓储在webapi的使用
-  - [ ] dapper事务，工作单元应用
-- [x] webapi Restful
-  - [x] [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
-  - [x] PostMan工具的使用
-- [x] 全局异常日志
-- [x] [json patch](http://jsonpatch.com/)
-- [x] 单元测试
-  - [x] xunit+Moq+MemoryEFDbContext测试UserController
-  - [x] FluentAPI写UserController测试用例
-- [x] 部署
-  - [x] GitLab CI完整部署UserAPI到线上测试环境
-### 网关与认证
-- [ ] 授权服务
-  - [x] User.Identity
-  - [x] 获取profile(再次从网关把token传了一次)
-  - [ ] oceloct自带传递方式
-- [ ] 网关
-  - [x] [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
-  - [x] Ocelot集成Identity Server鉴权
-  - [ ] [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
-  - [x] [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
-  - [x] [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-  - [x] [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
-  - [x] [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
-### 通讯录服务
- - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
- - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
- - [CAP集成RabbitMq](https://github.com/dotnetcore/CAP)
-### 项目推荐服务
+### [ASP.NET Core分布式项目实战](http://video.jessetalk.cn/course/5)
+- ### 用户服务
+  - docker
+    - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
+    - docker安装mysql
+      - 外部volume挂载资料卷
+  - ef生成数据库
+    - [EF介绍](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
+    - 生成数据和数据初始化
+  - dapper
+    - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
+    - [demo](https://github.com/jacklmjie/aspnetcoreboilerplate/tree/master/demo/DemoDapper)
+    - dapper contain，仓储，事务，工作单元应用
+  - webapi Restful
+    - [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
+    - PostMan工具的使用
+  - 全局异常日志
+    - [json patch](http://jsonpatch.com/)
+  - 单元测试
+    - xunit+Moq+MemoryEFDbContext测试UserController，FluentAPI写UserController测试用例
+- ### 授权服务
+  - 统一验证&授权
+    - [IdentityServer建立授权与验证服务](https://www.cnblogs.com/edisonchou/p/identityserver4_foundation_and_quickstart_01.html)
+    - [Ocelot+IdentityServer统一验证与授权服务](https://www.cnblogs.com/edisonchou/p/identityserver4_foundation_and_quickstart_01.html)
+    - 获取profile(再次从网关把token传了一次)，oceloct自带授权方式暂未实现
+  - 熔断&降级
+    - [Polly](http://www.jessetalk.cn/2018/03/25/asp-vnext-polly-docs/)
+    - [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
+  - API网关
+     - [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
+- ### 通讯录服务
+  - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
+  - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
+- ### 项目服务
   - 三层,OOO和DDD区别
+  - [eShopOnContainers](https://www.cnblogs.com/sheng-jie/p/9789180.html)
   - CQRS
-
+    - [CQRS架构和传统架构的优缺点比较](http://www.techweb.com.cn/network/system/2017-07-07/2553563.shtml)
+    - [MediatR](https://www.cnblogs.com/sheng-jie/p/10280336.html) 
+  - 数据一致性&事件总线
+     - [CAP集成RabbitMq](https://github.com/dotnetcore/CAP)
+- ### 部署
+  - 服务发现&注册&通信
+    - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
+    - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
+    - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
+  - Docker & CI/CD
+    - [基于Jenkins+Docker实现持续部署](https://www.cnblogs.com/edisonchou/p/CD_foundation_based_on_jenkins_and_docker.html)
+    - [基于Gitlab部署]视频里的部署方案
+  - 统一配置中心
+    - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
+  - 分布式追踪&日志
+    - [Skywalking](https://github.com/SkyAPM/SkyAPM-dotnet)
+    - [在 ASP.NET Core 中集成 Skywalking APM](https://www.cnblogs.com/savorboard/p/asp-net-core-skywalking.html)
+    - [使用docker-compose 一键部署你的分布式调用链跟踪框架skywalking](https://www.cnblogs.com/huangxincheng/p/9666930.html)
+  - 统一性能监控
+    - [基于App.Metrics+InfluxDB+Grafana实现统一性能监控](https://www.cnblogs.com/edisonchou/p/integrated_performance_monitoring_foundation.html)
 ## DDD概念
 - ### 值对象
   - 很多对象没有概念上的表示，他们描述了一个事务的某种特征。 用于描述领域的某个方面而本身没有概念表示的对象称为Value Object（值对象）
