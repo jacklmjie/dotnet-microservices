@@ -1,4 +1,5 @@
 ## 微服务系列
+### [ASP.NET Core分布式项目实战](http://video.jessetalk.cn/course/5)
 - ### 用户服务
   - docker
     - [windows docker安装](https://www.runoob.com/docker/windows-docker-install.html)
@@ -10,7 +11,7 @@
   - dapper
     - [深入dapper](https://www.cnblogs.com/ITWeiHan/p/11614704.html)
     - [demo](https://github.com/jacklmjie/aspnetcoreboilerplate/tree/master/demo/DemoDapper)
-    - [dapper contain，仓储，事务，工作单元应用
+    - dapper contain，仓储，事务，工作单元应用
   - webapi Restful
     - [RESTful API最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)
     - PostMan工具的使用
