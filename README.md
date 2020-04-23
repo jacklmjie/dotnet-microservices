@@ -48,6 +48,9 @@
   - Docker & CI/CD
   - 统一配置中心
   - 分布式追踪&日志
+    - [Skywalking](https://github.com/SkyAPM/SkyAPM-dotnet)
+    - [在 ASP.NET Core 中集成 Skywalking APM](https://www.cnblogs.com/savorboard/p/asp-net-core-skywalking.html)
+    - [使用docker-compose 一键部署你的分布式调用链跟踪框架skywalking](https://www.cnblogs.com/huangxincheng/p/9666930.html)
   - 统一性能监控
 ## DDD概念
 - ### 值对象
