@@ -19,6 +19,9 @@
     - [json patch](http://jsonpatch.com/)
   - 单元测试
     - xunit+Moq+MemoryEFDbContext测试UserController，FluentAPI写UserController测试用例
+    - [xunit](https://github.com/jacklmjie/microservices/blob/master/tests/User.API.UnitTest/XUnitTest.cs)
+    - [moq](https://github.com/moq/moq4)
+    - [测试覆盖率](https://www.cnblogs.com/uoyo/p/12767960.html)
 - ### 授权服务
   - 统一验证&授权
     - [IdentityServer建立授权与验证服务](https://www.cnblogs.com/edisonchou/p/identityserver4_foundation_and_quickstart_01.html)
