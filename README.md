@@ -48,6 +48,7 @@
   - Docker & CI/CD
     - [基于Jenkins+Docker实现持续部署](https://www.cnblogs.com/edisonchou/p/CD_foundation_based_on_jenkins_and_docker.html)
     - [基于Gitlab部署]视频里的部署方案
+    - [ASP.NET Core DevOps](https://www.cnblogs.com/stulzq/p/8629165.html)
   - 统一配置中心
     - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
   - 分布式追踪&日志
