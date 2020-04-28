@@ -48,17 +48,15 @@
     - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
     - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
     - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-  - Docker & CI/CD
-    - [基于Jenkins+Docker实现持续部署](https://www.cnblogs.com/edisonchou/p/CD_foundation_based_on_jenkins_and_docker.html)
-    - [基于Gitlab部署]视频里的部署方案
-    - [ASP.NET Core DevOps](https://www.cnblogs.com/stulzq/p/8629165.html)
   - 统一配置中心
     - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
   - 分布式追踪&日志
     - [Docker安装Skywalking APM分布式追踪系统](https://www.cnblogs.com/sunyuliang/p/11422576.html)
     - [.NetCore从零开始使用Skywalking分布式链路追踪系统](https://www.cnblogs.com/sunyuliang/p/11424848.html)
-  - 统一性能监控
-    - [基于App.Metrics+InfluxDB+Grafana实现统一性能监控CPU、内存](https://www.cnblogs.com/weiBlog/p/11717324.html)
+   - Docker & CI/CD
+    - [基于Gitlab部署]视频里的部署方案
+    - [Jenkins](https://www.cnblogs.com/stulzq/p/8629165.html)
+   - [Docker和Kubernetes相关](https://github.com/jacklmjie/aspnetcoreboilerplate/edit/master/README.md)
 ## DDD概念
 - ### 值对象
   - 很多对象没有概念上的表示，他们描述了一个事务的某种特征。 用于描述领域的某个方面而本身没有概念表示的对象称为Value Object（值对象）
