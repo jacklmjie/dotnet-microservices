@@ -32,9 +32,9 @@
     - [HttpClientFactory 和 Polly](https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly)
   - API网关
      - [Ocelot](http://www.jessetalk.cn/2018/03/19/net-core-apigateway-ocelot-docs/)
-- ### 通讯录服务
-  - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
-  - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
+  - ### 通讯录服务
+    - [UML类图几种关系](https://blog.csdn.net/tianhai110/article/details/6339565)
+    - [MongoDB数据库,数据嵌套操作](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-3.1&tabs=visual-studio)
 - ### 项目服务
   - 三层,OOO和DDD区别
   - [eShopOnContainers](https://www.cnblogs.com/sheng-jie/p/9789180.html)
@@ -48,18 +48,16 @@
     - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
     - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
     - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-  - Docker & CI/CD
-    - [基于Jenkins+Docker实现持续部署](https://www.cnblogs.com/edisonchou/p/CD_foundation_based_on_jenkins_and_docker.html)
-    - [基于Gitlab部署]视频里的部署方案
-    - [ASP.NET Core DevOps](https://www.cnblogs.com/stulzq/p/8629165.html)
   - 统一配置中心
     - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
   - 分布式追踪&日志
-    - [Skywalking](https://github.com/SkyAPM/SkyAPM-dotnet)
-    - [在 ASP.NET Core 中集成 Skywalking APM](https://www.cnblogs.com/savorboard/p/asp-net-core-skywalking.html)
-    - [使用docker-compose 一键部署你的分布式调用链跟踪框架skywalking](https://www.cnblogs.com/huangxincheng/p/9666930.html)
-  - 统一性能监控
-    - [基于App.Metrics+InfluxDB+Grafana实现统一性能监控](https://www.cnblogs.com/edisonchou/p/integrated_performance_monitoring_foundation.html)
+    - [Docker安装Skywalking APM分布式追踪系统](https://www.cnblogs.com/sunyuliang/p/11422576.html)
+    - [.NetCore从零开始使用Skywalking分布式链路追踪系统](https://www.cnblogs.com/sunyuliang/p/11424848.html)
+    - [SkyAPM-dotnet](https://github.com/SkyAPM/SkyAPM-dotnet)
+  - Docker & CI/CD
+    - [基于Gitlab部署]视频里的部署方案
+    - [Jenkins](https://www.cnblogs.com/stulzq/p/8629165.html)
+   - [Docker和Kubernetes相关](https://github.com/jacklmjie/aspnetcoreboilerplate/edit/master/README.md)
 ## DDD概念
 - ### 值对象
   - 很多对象没有概念上的表示，他们描述了一个事务的某种特征。 用于描述领域的某个方面而本身没有概念表示的对象称为Value Object（值对象）
