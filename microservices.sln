@@ -32,6 +32,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Infrastructure", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recommend.API", "src\Recommend.API\Recommend.API.csproj", "{686232AB-7C2C-4A29-B073-669DBC16285D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkywalkingDemo", "demo\SkywalkingDemo\SkywalkingDemo.csproj", "{09BB6B51-BF9D-43AF-A227-896F1932D09B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +78,10 @@ Global
 		{686232AB-7C2C-4A29-B073-669DBC16285D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{686232AB-7C2C-4A29-B073-669DBC16285D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{686232AB-7C2C-4A29-B073-669DBC16285D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +97,7 @@ Global
 		{985C535B-6708-43C4-9B40-5B4E1F7B9A6A} = {AEF1AE74-F643-4F0E-9893-E2D150033AF7}
 		{CB2E5FD3-7F9D-4769-801A-82F7CEF2D0FC} = {AEF1AE74-F643-4F0E-9893-E2D150033AF7}
 		{686232AB-7C2C-4A29-B073-669DBC16285D} = {B64C11FF-4404-4BAB-8258-F73AE0FD2BEF}
+		{09BB6B51-BF9D-43AF-A227-896F1932D09B} = {B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4626BDE-D8BF-4D02-A073-8BCD6D74E581}
