@@ -48,8 +48,6 @@
     - [consul安装在docker](https://www.cnblogs.com/PearlRan/p/11225953.html)
     - [consul安装](https://learn.hashicorp.com/consul/getting-started/agent)
     - [conslu 服务注册与发现](http://michaco.net/blog/ServiceDiscoveryAndHealthChecksInAspNetCoreWithConsul)
-  - 统一配置中心
-    - [基于Apollo实现统一配置中心](https://www.cnblogs.com/edisonchou/p/9419379.html)
   - 分布式追踪&日志
     - [Docker安装Skywalking APM分布式追踪系统](https://www.cnblogs.com/sunyuliang/p/11422576.html)
     - [.NetCore从零开始使用Skywalking分布式链路追踪系统](https://www.cnblogs.com/sunyuliang/p/11424848.html)
