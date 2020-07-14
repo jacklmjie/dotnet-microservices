@@ -1,16 +1,17 @@
 using System.Linq;
 using System.Threading.Tasks;
+using ConsulServiceRegistration;
 using Core.API.Extensions;
 using Core.API.Filters;
 using Core.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 
 namespace Core.API
@@ -36,6 +37,7 @@ namespace Core.API
             services.AddMessage(builder => builder.UseSms());
             //使用健康检查
             services.AddHealthChecks();
+            services.AddConsul();
 
             ////添加多个检查
             //services.AddHealthChecks()
@@ -43,12 +45,16 @@ namespace Core.API
             //    .AddCheck<RedisHealthCheck>("redis_check");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ConsulServiceOptions> serviceOptions)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // 配置健康检测地址，.NET Core 内置的健康检测地址中间件
+            app.UseHealthChecks(serviceOptions.Value.HealthCheck);
+            app.UseConsul();
 
             app.UseRouting();
 
@@ -58,24 +64,24 @@ namespace Core.API
             app.UseMiddleware<TestMiddleware>();
             app.UseTest();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //使用该扩展方法
-                endpoints.MapHealthChecks("/health");
-
-                //单独检查
-                endpoints.MapHealthChecks("/redishealth", new HealthCheckOptions()
-                {
-                    Predicate = s => s.Name.Equals("redis_check"),
-                    ResponseWriter = WriteResponse
-                });
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //    //使用该扩展方法
+            //    endpoints.MapHealthChecks("/health");
+
+            //    //单独检查
+            //    endpoints.MapHealthChecks("/redishealth", new HealthCheckOptions()
+            //    {
+            //        Predicate = s => s.Name.Equals("redis_check"),
+            //        ResponseWriter = WriteResponse
+            //    });
+            //});
         }
 
         //指定健康检查返回格式
