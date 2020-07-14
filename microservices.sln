@@ -34,7 +34,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recommend.API", "src\Recomm
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkywalkingDemo", "demo\SkywalkingDemo\SkywalkingDemo.csproj", "{09BB6B51-BF9D-43AF-A227-896F1932D09B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkywalkingDemo", "demo\SkywalkingDemo\SkywalkingDemo.csproj", "{09BB6B51-BF9D-43AF-A227-896F1932D09B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.API", "demo\Core.API\Core.API.csproj", "{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A0D730B6-4B77-4092-A406-2E9E0E8AA538}"
+	ProjectSection(SolutionItems) = preProject
+		docs\CORE.API.md = docs\CORE.API.md
+		docs\DOCKER.md = docs\DOCKER.md
+		docs\k8s.md = docs\k8s.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "service", "service", "{AA81D51E-68DD-485F-812F-3DA1FC45F142}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +93,10 @@ Global
 		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09BB6B51-BF9D-43AF-A227-896F1932D09B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +113,8 @@ Global
 		{CB2E5FD3-7F9D-4769-801A-82F7CEF2D0FC} = {AEF1AE74-F643-4F0E-9893-E2D150033AF7}
 		{686232AB-7C2C-4A29-B073-669DBC16285D} = {B64C11FF-4404-4BAB-8258-F73AE0FD2BEF}
 		{09BB6B51-BF9D-43AF-A227-896F1932D09B} = {B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}
+		{D4A90576-CFCC-49E1-BAB1-1BC3670FB8D7} = {B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}
+		{A0D730B6-4B77-4092-A406-2E9E0E8AA538} = {B1ABCEFE-0ED1-4C5A-AAEB-1E34E3D5B742}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4626BDE-D8BF-4D02-A073-8BCD6D74E581}
