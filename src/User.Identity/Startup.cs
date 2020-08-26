@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using IdentityServer4.Services;
 using User.Identity.Authentication;
-using User.Identity.Services;
 using System.Net.Http;
 using DnsClient;
 using Polly;

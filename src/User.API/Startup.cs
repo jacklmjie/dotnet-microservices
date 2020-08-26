@@ -18,6 +18,11 @@ using System;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Linq;
+using Microsoft.Extensions.Options;
+using StackExchange.Redis;
+using User.API.Dtos;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace User.API
 {
@@ -35,18 +40,33 @@ namespace User.API
             services.AddCustomIntegrations(Configuration)
                     .AddCustomAuthentication()
                     .AddCustomCap(Configuration)
-                    .AddConsulServiceDiscovery(Configuration);
+                    .AddConsulServiceDiscovery(Configuration)
+                    .AddCustomSwagger(Configuration);
             services.AddControllers().AddNewtonsoftJson();
 
-            //TODO:可以使用扩展的健康检查
-            //services.AddHealthChecks();
+            services.AddHealthChecks();
+
+            //添加redis
+            //services.AddSingleton<ConnectionMultiplexer>(sp =>
+            //{
+            //    var settings = sp.GetRequiredService<IOptions<UserSettings>>().Value;
+            //    var configuration = ConfigurationOptions.Parse(settings.ConnectionString, true);
+
+            //    configuration.ResolveDns = true;
+
+            //    return ConnectionMultiplexer.Connect(configuration);
+            //});
+            //services.AddTransient<IUserRepository, RedisUserRepository>();
 
             //异常过滤器
             //MVC中间件之前的一些错误，其实是捕获不到的,仅仅关心控制器之间的异常
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                options.Filters.Add(typeof(ValidateModelStateFilter));
             }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,12 +77,7 @@ namespace User.API
             }
             else
             {
-                //默认异常中间件ExceptionHandlerMiddleware,有参数ExceptionHandlingPath/ExceptionHandler
-                //和放置位置有关，第一个所有错误都能捕捉到
-                app.UseExceptionHandler("/Error");
-
-                //自定义异常中间件
-                //app.UseMiddleware<MyExceptionMiddleware>();
+                //app.UseExceptionHandler("/Error");
             }
 
             using (var scope = app.ApplicationServices.CreateScope())
@@ -78,11 +93,20 @@ namespace User.API
 
             app.UseAuthorization();
 
+            string pathBase = "/api";
+            app.UsePathBase(pathBase);
+            app.UseSwagger()
+             .UseSwaggerUI(c =>
+             {
+                 c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "User.API V1");
+                 c.OAuthClientId("userswaggerui");
+                 c.OAuthAppName("user Swagger UI");
+             });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //健康检查地址
-                //endpoints.MapHealthChecks("/health");
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
@@ -104,6 +128,9 @@ namespace User.API
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
+
+            //add custom application services
+            services.AddTransient<IIdentityParser<ApplicationUser>, IdentityParser>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
             services.AddAuthentication(options =>
@@ -154,6 +181,40 @@ namespace User.API
                     cfg.Address = new Uri(options.Consul.HttpEndpoint);
                 }
             }));
+
+            return services;
+        }
+
+
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "User HTTP API",
+                    Version = "v1",
+                    Description = "The User Service HTTP API"
+                });
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        Implicit = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri($"http://localhost/connect/authorize"),
+                            TokenUrl = new Uri($"http://localhost/connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                { "user", "user_api" }
+                            }
+                        }
+                    }
+                });
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
+            });
 
             return services;
         }

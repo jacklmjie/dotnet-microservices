@@ -2,6 +2,11 @@
 
 namespace User.API
 {
+    public class UserSettings
+    {
+        public string ConnectionString { get; set; }
+    }
+
     public class ServiceDiscoveryOptions
     {
         public string ServiceName { get; set; }

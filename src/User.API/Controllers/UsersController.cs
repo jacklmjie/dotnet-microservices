@@ -23,13 +23,19 @@ namespace User.API.Controllers
         private readonly UserContext _userContext;
         private readonly IIdentityService _identityService;
         private readonly ICapPublisher _capPublisher;
+        private readonly IIdentityParser<ApplicationUser> _appUserParser;
         public UsersController(UserContext userContext,
             IIdentityService identityService,
-            ICapPublisher capPublisher)
+            ICapPublisher capPublisher,
+            IIdentityParser<ApplicationUser> appUserParser)
         {
-            _userContext = userContext;
+            _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
             _identityService = identityService;
             _capPublisher = capPublisher;
+            _appUserParser = appUserParser;
+
+            //明确指出NoTracking来查询优化
+            //userContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         private void UserPatchChangedEvent(AppUser user)
@@ -50,17 +56,27 @@ namespace User.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
         {
-            var userId = _identityService.GetUserIdentity();
+            try
+            {
+                //获取授权的用户更多信息
+                var appUser = _appUserParser.Parse(HttpContext.User);
 
-            var user = await _userContext.Users
-                .AsNoTracking()
-                .Include(p => p.Properties)
-                .SingleOrDefaultAsync(u => u.Id == userId);
+                var userId = _identityService.GetUserIdentity();
 
-            if (user == null)
-                throw new UserDomainException($"错误的用户上下文Id={userId}");
+                var user = await _userContext.Users
+                    .AsNoTracking()
+                    .Include(p => p.Properties)
+                    .SingleOrDefaultAsync(u => u.Id == userId);
 
-            return Ok(user);
+                if (user == null)
+                    throw new UserDomainException($"错误的用户上下文Id={userId}");
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("error");
+            }
         }
 
         [Route("identity/{userId}")]
@@ -88,7 +104,7 @@ namespace User.API.Controllers
         [Route("")]
         [HttpPatch]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Patch([FromBody]JsonPatchDocument<AppUser> patch)
+        public async Task<ActionResult> Patch([FromBody] JsonPatchDocument<AppUser> patch)
         {
             var userId = _identityService.GetUserIdentity();
 
@@ -177,7 +193,7 @@ namespace User.API.Controllers
         [HttpPut]
         [Route("tags")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> UpdateUserTags([FromBody]List<string> tags)
+        public async Task<ActionResult> UpdateUserTags([FromBody] List<string> tags)
         {
             var userId = _identityService.GetUserIdentity();
 

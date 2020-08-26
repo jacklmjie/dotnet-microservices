@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Threading.Tasks;
 using User.API.Application.ActionResults;
 using User.API.Application.Exceptions;
@@ -30,16 +31,18 @@ namespace User.API.Application.Filters
             {
                 json.Message = context.Exception.Message;
                 context.Result = new BadRequestObjectResult(json);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             else
             {
-                json.Message = "网络错误";
+                json.Message = "An error occurred. Try it again.";
                 if (_env.IsDevelopment())
                 {
                     json.DevelopeMessage = context.Exception.StackTrace;
                 }
 
                 context.Result = new InternalServerErrorObjectResult(json);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
 
             _logger.LogError(context.Exception, context.Exception.Message);

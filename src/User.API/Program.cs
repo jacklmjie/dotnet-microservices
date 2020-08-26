@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using User.API.Application.Middlewares;
 
 namespace User.API
 {
@@ -12,6 +13,10 @@ namespace User.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                 .UseFailing(options => {
+                     options.ConfigPath = "/Failing";
+                     options.NotFilteredPaths.AddRange(new[] { "/hc", "/liveness" });
+                 })
                 .UseStartup<Startup>();
     }
 }
