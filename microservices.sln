@@ -41,8 +41,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A0D730B6-4B77-4092-A406-2E9E0E8AA538}"
 	ProjectSection(SolutionItems) = preProject
 		docs\CORE.API.md = docs\CORE.API.md
-		docs\DOCKER.md = docs\DOCKER.md
-		docs\k8s.md = docs\k8s.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "service", "service", "{AA81D51E-68DD-485F-812F-3DA1FC45F142}"

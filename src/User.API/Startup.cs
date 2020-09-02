@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using Consul;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
@@ -15,14 +14,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using User.API.Services;
 using System;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using System.Linq;
-using Microsoft.Extensions.Options;
-using StackExchange.Redis;
 using User.API.Dtos;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using User.API.Application.Extension;
 
 namespace User.API
 {
@@ -40,7 +35,6 @@ namespace User.API
             services.AddCustomIntegrations(Configuration)
                     .AddCustomAuthentication()
                     .AddCustomCap(Configuration)
-                    .AddConsulServiceDiscovery(Configuration)
                     .AddCustomSwagger(Configuration);
             services.AddControllers().AddNewtonsoftJson();
 
@@ -49,8 +43,8 @@ namespace User.API
             //添加redis
             //services.AddSingleton<ConnectionMultiplexer>(sp =>
             //{
-            //    var settings = sp.GetRequiredService<IOptions<UserSettings>>().Value;
-            //    var configuration = ConfigurationOptions.Parse(settings.ConnectionString, true);
+            //    var redisConnectionString = Configuration.GetConnectionString("Redis");
+            //    var configuration = ConfigurationOptions.Parse(redisConnectionString, true);
 
             //    configuration.ResolveDns = true;
 
@@ -65,11 +59,9 @@ namespace User.API
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(ValidateModelStateFilter));
             }).SetCompatibilityVersion(CompatibilityVersion.Latest);
-
-
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -86,8 +78,6 @@ namespace User.API
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<UserContextSeed>>();
                 new UserContextSeed().SeedAsync(context, logger).Wait();
             }
-
-            app.UseConsulHealthChecks(Configuration);
 
             app.UseRouting();
 
@@ -108,6 +98,9 @@ namespace User.API
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
+
+            //服务注册
+            app.RegisterConsul(Configuration, lifetime);
         }
     }
 
@@ -170,22 +163,6 @@ namespace User.API
             return services;
         }
 
-        public static IServiceCollection AddConsulServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
-        {
-            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-            services.Configure<ServiceDiscoveryOptions>(configuration.GetSection("ServiceDiscovery"));
-            services.AddSingleton<IConsulClient>(p => new ConsulClient(cfg =>
-            {
-                if (!string.IsNullOrEmpty(options.Consul.HttpEndpoint))
-                {
-                    cfg.Address = new Uri(options.Consul.HttpEndpoint);
-                }
-            }));
-
-            return services;
-        }
-
-
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(options =>
@@ -217,55 +194,6 @@ namespace User.API
             });
 
             return services;
-        }
-
-        public static IApplicationBuilder UseConsulHealthChecks(this IApplicationBuilder app, IConfiguration configuration)
-        {
-            var options = configuration.GetSection("ServiceDiscovery").Get<ServiceDiscoveryOptions>();
-            var appLife = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>() ??
-               throw new ArgumentException("Missing Dependency", nameof(IHostApplicationLifetime));
-
-            var consul = app.ApplicationServices.GetRequiredService<IConsulClient>() ??
-               throw new ArgumentException("Missing Dependency", nameof(IConsulClient));
-
-            if (string.IsNullOrEmpty(options.ServiceName))
-                throw new ArgumentException("service name must be configure", nameof(options.ServiceName));
-
-            var features = app.Properties["server.Features"] as FeatureCollection;
-            var addresses = features.Get<IServerAddressesFeature>()
-                .Addresses
-                .Select(p => new Uri(p));
-
-            foreach (var address in addresses)
-            {
-                var serviceId = $"{options.ServiceName}_{address.Host}:{address.Port}";
-
-                var httpCheck = new AgentServiceCheck()
-                {
-                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
-                    Interval = TimeSpan.FromSeconds(30),
-                    HTTP = new Uri(address, "health").OriginalString
-                };
-
-                var registration = new AgentServiceRegistration()
-                {
-                    Checks = new[] { httpCheck },
-                    Address = address.Host,
-                    ID = serviceId,
-                    Name = options.ServiceName,
-                    Port = address.Port,
-                    Tags = new[] { "api" }
-                };
-
-                consul.Agent.ServiceRegister(registration).GetAwaiter().GetResult();
-
-                appLife.ApplicationStopping.Register(() =>
-                {
-                    consul.Agent.ServiceDeregister(serviceId).GetAwaiter().GetResult();
-                });
-            }
-
-            return app;
         }
     }
 }
