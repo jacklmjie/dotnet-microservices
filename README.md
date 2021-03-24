@@ -53,6 +53,7 @@
     - [Docker安装Skywalking APM分布式追踪系统](https://www.cnblogs.com/sunyuliang/p/11422576.html)
     - [.NetCore从零开始使用Skywalking分布式链路追踪系统](https://www.cnblogs.com/sunyuliang/p/11424848.html)
     - [SkyAPM-dotnet](https://github.com/SkyAPM/SkyAPM-dotnet)
+    - [Elastic APM](https://www.sohu.com/a/339938468_468635)
   - Docker & CI/CD
     - [基于Gitlab部署]视频里的部署方案
     - [Jenkins](https://www.cnblogs.com/stulzq/p/8629165.html)
